@@ -1,0 +1,15 @@
+# Increase volume
+"pactl set-sink-volume 1 +3%"
+   XF86AudioRaiseVolume
+
+# Decrease volume
+"pactl set-sink-volume 1 -3%"
+   XF86AudioLowerVolume
+
+# Mute/unmute volume
+"pactl set-sink-mute 1 toggle"
+   XF86AudioMute
+
+## Lock screen
+#"/usr/bin/i3lock -c 000000"
+#   Mod1 + Mod4 + L 

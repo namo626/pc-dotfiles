@@ -1,0 +1,332 @@
+/* Stylesheet */
+
+/* Common Styles */
+
+html, body {
+	margin: 0;
+	width: auto;
+	height:98%;
+}
+
+body {	
+	background-image:url("../img/background.png");
+}
+
+button {
+	font-size:125%;
+}
+
+h3 {
+	text-align: left;
+}
+
+.active-selection {
+	color: blue;
+}
+
+.inactive-selection {
+	color: default;
+}
+
+.lowered {
+	margin-top: 10%;
+}
+
+.popup_panel {
+	overflow: auto;
+	padding-left: 5%;
+	padding-right: 5%;
+	height: 95%;
+	text-align: justify;
+}
+
+#header {
+	margin-top: 2%;
+	min-height: 5%;
+	height: auto;
+	text-align: center;
+}
+
+#header button {
+	float: right;
+}
+
+#wizard_view {
+	overflow: auto;
+	margin: 1%;
+	height: 80%;
+}
+
+#footer {
+	position:absolute;
+	background-color: white;
+	left: 0px;
+	bottom: 0px;
+	width: 100%;
+	height: 15%;
+}
+
+#footer2 {
+	position:absolute;
+	background-color: white;
+	left: 0px;
+	bottom: 0px;
+	width: 100%;
+	height: 10%;
+}
+
+#footer3 {
+	position:absolute;
+	background-color: white;
+	left: 0px;
+	bottom: 0px;
+	width: 100%;
+	height: 20%;
+}
+
+#footer4 {
+	position:absolute;
+	background-color: white;
+	left: 0px;
+	bottom: 0px;
+	width: 100%;
+	height: 30%;
+}
+
+#footer_copyright {
+	float: right;
+	margin-top: -20px;
+	margin-right: 10px;
+}
+
+#footer_left {
+	float: left;
+}
+
+#footer_left button {
+	margin-left: 75px;
+	margin-top: 25px;
+}
+
+#footer_left img {	
+	position:absolute;
+	margin-top: 10px;
+	margin-left: 10px;
+	width: 50px;
+	height: 50px;
+}
+
+#footer_right {
+	margin-top: 20px;
+	margin-right: 20px;
+	float: right;
+}
+
+/* Request Permissions View */
+
+#request_permissions {
+	margin-top:10%;
+	text-align: center;
+}
+
+/* Advanced View */
+
+#restartImg {
+	margin-top:2%;
+	margin-left:38%;
+	width: 150px;
+	height: 100px;
+}
+
+#advanced {	
+	height: 90%;
+}
+
+#advanced > div {
+	height: 100%;
+}
+
+#advanced > div > div {
+	height: 100%;
+}
+
+#cancelPairing {
+	text-align: center;
+	margin-top:5px;
+}
+
+#deviceList {
+	position: relative;
+	float: left;
+	height: 65%;
+	width: 40%;
+}
+
+#deviceList > div {
+	overflow: auto;
+	height: 100%;
+	margin-right: 8px;
+	border: 1px solid lightgrey;
+	background: white;
+}
+
+#noReceiver {
+	margin: 10px;
+}
+
+.receiver {
+	margin-top: 10px;
+	margin-left: 10px;
+}
+
+.receiver :hover {
+	cursor: pointer;
+	cursor: hand;
+	font-style: italic;
+}
+
+.wirelessDevice {
+	margin-left: 15px;
+}
+
+.wirelessDevice :hover {
+	cursor: pointer;
+	cursor: hand;
+	font-style: italic;
+}
+
+.devicePropertyName {
+	color: grey;
+}
+
+#deviceDetails {
+	position: relative;
+	float: left;
+	height: 65%;
+	width: 60%;
+}
+
+#deviceDetails > div {
+	border: 1px solid lightgrey;
+	background: white;
+	height: 100%;
+}
+
+#deviceDetails > div > div {
+	margin: 10px;
+	height: 100%;
+}
+
+.devicePropertyNames {
+	float: left;
+	width: 48%;
+	text-align: right;
+	color: grey;
+}
+
+.devicePropertyValues {
+	float: left;
+	width: 48%;
+	margin-left: 2%;
+	text-align: left;
+}
+
+.deviceButton {
+	clear: both;
+	width: 100%;
+	text-align: center;
+}
+
+#tip {
+	position: relative;
+	clear: both;
+	top: 10px;
+}
+
+/* Restart View */
+
+
+/* Plug Receiver View */
+
+#plug_receiver img {
+	margin-left:30%;
+	width: 200px;
+	height: 125px;
+}
+
+/* Confirm Pairing */
+
+#confirm_pairing_img {
+	width: 30px;
+	height: 30px;
+}
+
+/* Pairing Failed View */
+
+#pairing_failed img {
+	margin-left:45%;
+	width: 75px;
+	height: 75px;
+}
+
+/* Device Paired View */
+
+#device_paired img {
+	margin-left:43%;
+	margin-top:2%;
+	width: 90px;
+	height: 90px;
+}
+
+/* Wrong Receiver View */
+
+#receiver_full_img1 {
+	margin-top: 80px;
+	width: 30px;
+	height: 30px;
+}
+
+#receiver_full_img2 {
+	float: right;
+	margin-right: 45%;
+	width: 75px;
+	height: 75px;
+}
+
+
+/* Unplug Receiver Devices View */
+
+#unplug_receiver img {
+	margin-top:2%;
+	margin-left:33%;
+	width: 225x;
+	height: 150px;
+}
+
+/* Unplug Last Receiver Devices View */
+
+#unplug_last_receiver img {
+	margin-top:2%;
+	margin-left:33%;
+	width: 225x;
+	height: 150px;
+}
+
+/* Too Many Devices View */
+
+#too_many_devices img {
+	margin-top:2%;
+	margin-left:42%;
+	width: 100px;
+	height: 100px;
+}
+
+
+/* Wrong Receiver View */
+
+#wrong_receiver img {
+	margin-top:2%;
+	margin-left:33%;
+	width: 200;
+	height: 125px;
+}

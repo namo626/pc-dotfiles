@@ -1,0 +1,25 @@
+{
+   "app": {
+      "background": {
+         "scripts": [ "js/chrome-background.js" ]
+      }
+   },
+   "default_locale": "en",
+   "description": "__MSG_application_description__",
+   "icons": {
+      "128": "img/app_icon.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqCd2JK9xXHyqXU3v39yhqt1VIpoV9h+aOfH/GdcOgzdA9N2rh0dC8cB+ggxo4Fncb2Vn9t5q8k/tqbCtZmhudCy+6Rhnl92pCUW5GtjUE5yOvlgzuaEolDmgcyxS1lAJ7hAZGDSEZe3LtTW0/OXUszAd0k9nbKwjWZJFf/m3Pr2DOwS74saO4nJLwVTA0G94WwtisWTySQHe9aX/KkMNxlXIvRolldVNyy+ecYk6tAFxCV0/xptSCLnTs0iX/zbzEguJalCNM7lFgGP9yMiaQU08ciQxCKxZm7MK/Qkz1C6rSNXGzu+PhC9dW4O1z3oGVaonpDH33BeSQ+6/IAmnMQIDAQAB",
+   "manifest_version": 2,
+   "minimum_chrome_version": "39",
+   "name": "__MSG_application_title__",
+   "optional_permissions": [ {
+      "usbDevices": [ {
+         "productId": 50475,
+         "vendorId": 1133
+      } ]
+   } ],
+   "permissions": [ "hid" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0.1"
+}

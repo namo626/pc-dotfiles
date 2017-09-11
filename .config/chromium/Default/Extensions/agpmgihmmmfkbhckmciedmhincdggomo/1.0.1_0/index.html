@@ -1,0 +1,166 @@
+<!doctype html>
+
+<html ng-app="unifyingApp">
+
+<head>
+	<meta charset="utf-8" />
+	<title><span app-name></span></title>
+	<link rel="stylesheet" href="css/app.css">
+</head>
+
+<body ng-controller="UnifyingController">
+
+	<!-- Header -->
+
+	<div id="header">
+		<!-- For app exit debug purpose -->
+		<!-- <button ng-click="exit()">Exit</button> -->
+		<div id="logo">
+			<img src="img/unifying_116x30.png"</img>
+		</div>
+	</div>
+
+	<!-- Wizard Page -->
+
+	<div id="wizard_view" ng-switch on="unifying.state">
+		<div id="request_permissions" ng-switch-when="request_permissions">
+			<div ng-include="'partials/request_permissions.html'"></div>
+		</div>
+		<div id="welcome" ng-switch-when="welcome">
+			<div ng-include="'partials/welcome.html'"></div>
+		</div>
+		<div id="advanced" ng-switch-when="advanced">
+			<div ng-include="'partials/advanced.html'"></div>
+		</div>
+		<div id="restart" ng-switch-when="restart">
+			<div ng-include="'partials/restart.html'"></div>
+		</div>
+		<div id="confirm_pairing" ng-switch-when="confirm_pairing">
+			<div ng-include="'partials/confirm_pairing.html'"></div>
+		</div>
+		<div id="device_paired" ng-switch-when="device_paired">
+			<div ng-include="'partials/device_paired.html'"></div>
+		</div>
+		<div id="pairing_failed" ng-switch-when="pairing_failed">
+			<div ng-include="'partials/pairing_failed.html'"></div>
+		</div>
+		<div id="paired_devices" ng-switch-when="paired_devices">
+			<div ng-include="'partials/paired_devices.html'"></div>
+		</div>
+		<div id="plug_receiver" ng-switch-when="plug_receiver">
+			<div ng-include="'partials/plug_receiver.html'"></div>
+		</div>
+		<div id="unplug_receiver" ng-switch-when="unplug_receiver">
+			<div ng-include="'partials/unplug_receiver.html'"></div>
+		</div>
+		<div id="unplug_last_receiver" ng-switch-when="unplug_last_receiver">
+			<div ng-include="'partials/unplug_last_receiver.html'"></div>
+		</div>
+		<div id="receiver_full" ng-switch-when="receiver_full">
+			<div ng-include="'partials/receiver_full.html'"></div>
+		</div>
+		<div id="too_many_devices" ng-switch-when="too_many_devices">
+			<div ng-include="'partials/too_many_devices.html'"></div>
+		</div>
+		<div id="move_devices" ng-switch-when="move_devices">
+			<div ng-include="'partials/move_devices.html'"></div>
+		</div>
+		<div id="wrong_receiver" ng-switch-when="wrong_receiver">
+			<div ng-include="'partials/wrong_receiver.html'"></div>
+		</div>		
+	</div>
+
+	<!-- Footer -->
+
+	<div id="footer">
+		<div id="footer_copyright">
+			v <span app-version></span> - Copyright© 2014 Logitech
+		</div>
+		<div id="footer_left">
+			<img src="img/logo.png"</img>
+			<button id="advanced_button"
+					ng-hide="!unifying['state'].canGoAdvanced"
+					ng-click="unifying['state'].advanced()">
+				{{l10n.INDEX_ADVANCED}}
+			</button>
+			<button id="home_button"
+					ng-hide="!unifying['state'].canGoHome"
+					ng-click="unifying['state'].home()">
+				{{l10n.INDEX_HOME}}
+			</button>
+		</div>
+		<div id="footer_right">
+			<button id="previous_button"
+					ng-hide="!unifying['state'].canGoPrevious"
+					ng-click="unifying['state'].previous()">
+				{{l10n.INDEX_BACK}}
+			</button>
+			<button id="next_button"
+					ng-hide="!unifying['state'].canGoNext"
+					ng-click="unifying['state'].next()">
+				{{ unifying['state'].NextButtonText }}
+			</button>
+			<button id="finish_button"
+					ng-hide="!unifying['state'].canFinish"
+					ng-click="unifying['state'].finish()">
+				{{ unifying['state'].FinishButtonText }}
+			</button>
+		</div>
+	</div>
+
+	<script src="lib/devices/lib/core/lib/third_party/angular/angular.js"></script>
+	<script src="lib/devices/lib/core/lib/third_party/angular/angular-resource.js"></script>
+
+	<script src="lib/devices/lib/core/CoreModule.js"></script>
+	<script src="lib/devices/lib/core/Closable.js"></script>
+	<script src="lib/devices/lib/core/Injector.js"></script>
+	<script src="lib/devices/lib/core/Contract.js"></script>
+	<script src="lib/devices/lib/core/Debugger.js"></script>
+	<script src="lib/devices/lib/core/Log.js"></script>
+	<script src="lib/devices/lib/core/PackageInfo.js"></script>	
+	<script src="lib/devices/lib/core/Permissions.js"></script>	
+	<script src="lib/devices/lib/core/ObjectExtensions.js"></script>
+	<script src="lib/devices/lib/core/Observable.js"></script>
+	<script src="lib/devices/lib/core/ObservableArray.js"></script>
+	<script src="lib/devices/lib/core/ArrayBufferExtensions.js"></script>
+	<script src="lib/devices/lib/core/ArrayExtensions.js"></script>
+	<script src="lib/devices/lib/core/Filter.js"></script>
+	<script src="lib/devices/lib/core/FiniteStateMachine.js"></script>
+	<script src="lib/devices/lib/core/StringExtensions.js"></script>
+
+	<script src="lib/devices/lib/core/chrome/PackageInfoChrome.js"></script>
+	<script src="lib/devices/lib/core/chrome/PermissionsChrome.js"></script>
+
+	<script src="lib/devices/Device.js"></script>
+	<script src="lib/devices/DeviceProvider.js"></script>
+	<script src="lib/devices/HidUsage.js"></script>
+	<script src="lib/devices/HidApi.js"></script>
+	<script src="lib/devices/LogitechProduct.js"></script>
+	<script src="lib/devices/Product.js"></script>
+	<script src="lib/devices/Message.js"></script>
+	<script src="lib/devices/RequestPipe.js"></script>
+	<script src="lib/devices/Protocol.js"></script>
+	<script src="lib/devices/TransactionProtocol.js"></script>
+	<script src="lib/devices/HidppRequest.js"></script>
+	<script src="lib/devices/HidppProtocol.js"></script>
+	<script src="lib/devices/HidppPip.js"></script>
+	<script src="lib/devices/HidppRap.js"></script>
+	<script src="lib/devices/HidppFap.js"></script>
+	<script src="lib/devices/Feature_0000_Root.js"></script>
+	<script src="lib/devices/Feature_0001_FeatureSet.js"></script>
+	<script src="lib/devices/Feature_0003_FirmwareInfo.js"></script>
+	<script src="lib/devices/Feature_1000_Battery.js"></script>
+
+	<script src="lib/devices/chrome/HidApiChrome.js"></script>
+	<script src="lib/devices/mock/HidApiMock.js"></script>
+
+	<script src="js/unifying.js"></script>
+
+	<script src="js/ng-app.js"></script>
+	<script src="js/ng-controllers.js"></script>
+	<script src="js/ng-directives.js"></script>
+	<script src="js/ng-filters.js"></script>
+	<script src="js/ng-services.js"></script>
+</body>
+
+</html>

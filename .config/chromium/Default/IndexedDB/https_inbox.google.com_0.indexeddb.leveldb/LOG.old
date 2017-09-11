@@ -1,0 +1,3 @@
+2017/09/10-14:52:32.098 12077 Reusing MANIFEST /home/namo/.config/chromium/Default/IndexedDB/https_inbox.google.com_0.indexeddb.leveldb/MANIFEST-000001
+2017/09/10-14:52:32.098 12077 Recovering log #3
+2017/09/10-14:52:32.100 12077 Reusing old log /home/namo/.config/chromium/Default/IndexedDB/https_inbox.google.com_0.indexeddb.leveldb/000003.log 

@@ -1,0 +1,245 @@
+<div ng-show="unifying['state']['currentDevice'] !== null
+		  && !unifying['state']['currentDevice']['isLocked']">
+
+	<div ng-include="'partials/restart.html'"></div>
+
+	<div id="cancelPairing">
+		<button ng-click="unifying['state'].cancelPairing()">
+			{{l10n.ADVANCED_CANCEL_PAIRING}}
+		</button>
+	</div>
+</div>
+
+<div ng-hide="unifying['state']['currentDevice'] !== null
+		  && !unifying['state']['currentDevice']['isLocked']">
+
+	<h3>{{l10n.ADVANCED_TITLE}}</h3>
+
+	<p>{{l10n.ADVANCED_MORE_INFO}}</p>
+
+	<div id="deviceList">
+		<div>
+			<div id="noReceiver"
+				 ng-show="unifying['receivers'].length === 0">
+				{{l10n.ADVANCED_NO_RECEIVER}}
+			</div>
+
+			<div class="receiver" ng-repeat="receiver in unifying['receivers']">
+				<span ng-click="unifying['state'].selectDevice(receiver)"
+					  data-ng-class="{'active-selection': receiver === unifying['state']['currentDevice'],
+					                'inactive-selection': receiver !== unifying['state']['currentDevice']}">
+				 	<img src="../img/receiver_icon.bmp"
+				 	<span> {{l10n.ADVANCED_RECEIVER_NAME}}</span>
+				</span>
+
+				<div class="wirelessDevice" ng-repeat='wirelessDevice in receiver.hidppChildren'
+					 ng-click="unifying['state'].selectDevice(wirelessDevice)"
+					 data-ng-class="{'active-selection': wirelessDevice === unifying['state']['currentDevice'],
+					               'inactive-selection': wirelessDevice !== unifying['state']['currentDevice']}">
+
+					<span ng-switch
+						  on="wirelessDevice.rapDeviceType">
+						<img ng-switch-when="1"
+						     ng-hide="wirelessDevice.active"
+						     src="../img/keyboard_icon.bmp">
+						</img>
+						<img ng-switch-when="1"
+						     ng-show="wirelessDevice.active"
+						     src="../img/active_keyboard_icon.bmp">
+						</img>
+						<img ng-switch-when="2"
+						     ng-hide="wirelessDevice.active"
+						     src="../img/mouse_icon.bmp">
+						</img>
+						<img ng-switch-when="2"
+						     ng-show="wirelessDevice.active"
+						     src="../img/active_mouse_icon.bmp">
+						</img>
+						<img ng-switch-when="3"
+						     ng-hide="wirelessDevice.active"
+						     src="../img/numpad_icon.bmp">
+						</img>
+						<img ng-switch-when="3"
+						     ng-show="wirelessDevice.active"
+						     src="../img/active_numpad_icon.bmp">
+						</img>
+						<img ng-switch-when="4"
+						     ng-hide="wirelessDevice.active"
+						     src="../img/inactive.bmp">
+						</img>
+						<img ng-switch-when="4"
+						     ng-show="wirelessDevice.active"
+						     src="../img/active.bmp">
+						</img>
+						<img ng-switch-when="5"
+						     ng-hide="wirelessDevice.active"
+						     src="../img/inactive.bmp">
+						</img>
+						<img ng-switch-when="5"
+						     ng-show="wirelessDevice.active"
+						     src="../img/active.bmp">
+						</img>						
+						<img ng-switch-when="6"
+						     ng-hide="wirelessDevice.active"
+						     src="../img/inactive.bmp">
+						</img>
+						<img ng-switch-when="6"
+						     ng-show="wirelessDevice.active"
+						     src="../img/active.bmp">
+						</img>
+						<img ng-switch-when="7"
+						     ng-hide="wirelessDevice.active"
+						     src="../img/remote_icon.bmp">
+						</img>
+						<img ng-switch-when="7"
+						     ng-show="wirelessDevice.active"
+						     src="../img/active_remote_icon.bmp">
+						</img>
+						<img ng-switch-when="8"
+						     ng-hide="wirelessDevice.active"
+						     src="../img/trackball_icon.bmp">
+						</img>
+						<img ng-switch-when="8"
+						     ng-show="wirelessDevice.active"
+						     src="../img/active_trackball_icon.bmp">
+						</img>
+						<img ng-switch-when="9"
+						     ng-hide="wirelessDevice.active"
+						     src="../img/touchpad_icon.bmp">
+						</img>
+						<img ng-switch-when="9"
+						     ng-show="wirelessDevice.active"
+						     src="../img/active_touchpad_icon.bmp">
+						</img>
+						<img ng-switch-when="10"
+						     ng-hide="wirelessDevice.active"
+						     src="../img/tablet_icon.bmp">
+						</img>
+						<img ng-switch-when="10"
+						     ng-show="wirelessDevice.active"
+						     src="../img/active_tablet_icon.bmp">
+						</img>
+						<img ng-switch-when="11"
+						     ng-hide="wirelessDevice.active"
+						     src="../img/gamepad_icon.bmp">
+						</img>
+						<img ng-switch-when="11"
+						     ng-show="wirelessDevice.active"
+						     src="../img/active_gamepad_icon.bmp">
+						</img>
+						<img ng-switch-when="12"
+						     ng-hide="wirelessDevice.active"
+						     src="../img/joystick_icon.bmp">
+						</img>
+						<img ng-switch-when="12"
+						     ng-show="wirelessDevice.active"
+						     src="../img/active_joystick_icon.bmp">
+						</img>
+					</span>
+
+					<span ng-hide="!wirelessDevice.name">
+						{{wirelessDevice.name}}
+					</span>
+
+					<span ng-hide="wirelessDevice.name">
+						{{l10n.ADVANCED_DEVICE_NAME}}
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="deviceDetails">
+		<div>
+			<div id="noSelection" ng-hide="unifying['state']['currentDevice']">
+				{{l10n.ADVANCED_NO_SELECTION}}
+			</div>
+
+			<div ng-show="unifying['state']['currentDevice']
+					   && unifying['state']['currentDevice']['index'] === 255">
+				<div class="devicePropertyNames">
+					<p>{{l10n.ADVANCED_RECEIVER_NAME_LABEL}}</p>
+					<p>{{l10n.ADVANCED_FIRMWARE_VERSION}}</p>
+					<p>{{l10n.ADVANCED_DEVICES_PAIRED}}</p>
+				</div>
+				<div class="devicePropertyValues">
+					<p>{{l10n.ADVANCED_RECEIVER_NAME}}</p>
+					<p>
+						<span ng-hide="unifying['state']['currentDevice'].fwVersion">
+							0.0.0.0
+						</span>
+						<span ng-show="unifying['state']['currentDevice'].fwVersion">
+							{{unifying['state']['currentDevice'].fwVersion}}
+						</span>
+					</p>
+					<p>
+						{{unifying['state']['currentDevice'].devicesPaired}}
+						<div ng-show="unifying['state']['currentDevice'].isFull">
+							{{l10n.ADVANCED_RECEIVER_FULL}}
+						</div>
+					</p>
+				</div>
+				<div class="deviceButton">
+					<button ng-disabled="unifying['state']['currentDevice'].isFull"
+							ng-click="unifying['state'].pairNewDevice()">
+						{{l10n.ADVANCED_PAIR_DEVICE}}
+					</button>
+				</div>
+			</div>
+
+			<div ng-show="unifying['state']['currentDevice']
+				       && unifying['state']['currentDevice']['index'] !== 255">
+				<div class="devicePropertyNames">
+					<p>{{l10n.ADVANCED_DEVICE_NAME_LABEL}}</p>
+					<p>{{l10n.ADVANCED_FIRMWARE_VERSION}}</p>
+					<p>{{l10n.ADVANCED_DEVICE_STATUS}}</p>
+					<p>{{l10n.ADVANCED_BATTERY}}</p>
+				</div>
+				<div class="devicePropertyValues">
+					<p>
+						<span ng-hide="unifying['state']['currentDevice'].name">
+							{{l10n.ADVANCED_DEVICE_NAME}}
+						</span>
+						<span ng-show="unifying['state']['currentDevice'].name">
+							{{unifying['state']['currentDevice'].name}}
+						</span>
+					</p>
+					<p>
+						<span ng-hide="unifying['state']['currentDevice'].fwVersion">
+							0.0.0.0
+						</span>
+						<span ng-show="unifying['state']['currentDevice'].fwVersion">
+							{{unifying['state']['currentDevice'].fwVersion}}
+						</span>
+					</p>
+					<p>
+						<span ng-show="unifying['state']['currentDevice'].connected">
+							{{l10n.ADVANCED_ACTIVE}}
+						</span>
+						<span ng-hide="unifying['state']['currentDevice'].connected">
+							{{l10n.ADVANCED_INACTIVE}}
+						</span>
+					</p>
+					<p>
+						<span ng-hide="unifying['state']['currentDevice'].battery">
+							{{l10n.ADVANCED_UNKNOWN}}
+						</span>
+						<span ng-show="unifying['state']['currentDevice'].battery">
+							{{unifying['state']['currentDevice'].battery}}
+						</span>
+					</p>
+				</div>
+				<div class="deviceButton">
+					<button ng-click="unifying['state']['currentDevice'].unpair()">
+						{{l10n.ADVANCED_UNPAIR}}
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="tip">
+		<p>{{l10n.ADVANCED_TIP}}</p>
+	</div>
+
+</div>

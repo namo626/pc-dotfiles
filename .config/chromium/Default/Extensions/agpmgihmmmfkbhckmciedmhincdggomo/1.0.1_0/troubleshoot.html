@@ -1,0 +1,74 @@
+<!doctype html>
+
+<html ng-app="unifyingApp">
+
+<head>
+	<meta charset="utf-8" />
+	<title>{{l10n.INDEX_TITLE}}</title>
+	<link rel="stylesheet" href="css/app.css">
+</head>
+
+<body ng-controller="PopupController">
+
+	<!-- Body -->
+
+	<div class="popup_panel">
+
+		<h3>{{l10n.TROUBLESHOOT_TITLE}}</h3>
+		<p>{{l10n.TROUBLESHOOT_INTRO}}</p>
+
+		<ul>
+			<li>
+				<h4>{{l10n.TROUBLESHOOT_TITLE_1}}</h4>
+				{{l10n.TROUBLESHOOT_PARAGRAPH_1}}
+			</li>
+			<li>
+				<h4>{{l10n.TROUBLESHOOT_TITLE_2}}</h4>
+				{{l10n.TROUBLESHOOT_PARAGRAPH_2}}
+			</li>
+			<li>
+				<h4>{{l10n.TROUBLESHOOT_TITLE_3}}</h4>
+				{{l10n.TROUBLESHOOT_PARAGRAPH_3}}
+			</li>
+			<li>
+				<h4>{{l10n.TROUBLESHOOT_TITLE_4}}</h4>
+				{{l10n.TROUBLESHOOT_PARAGRAPH_4}}
+			</li>
+			<li>
+				<h4>{{l10n.TROUBLESHOOT_TITLE_5}}</h4>
+				{{l10n.TROUBLESHOOT_PARAGRAPH_5}}
+			</li>
+		</ul>
+
+		<p>
+			{{l10n.TROUBLESHOOT_STILL_TROUBLE}}
+			<a target="_blank" ng-href="http://www.logitech.com/unifying_troubleshooting">
+				{{l10n.TROUBLESHOOT_CLICK_HERE}}
+			</a>
+		</p>
+	</div>
+
+	<!-- Footer -->
+
+	<div id="footer2">
+		<div id="footer_left">
+			<img src="img/logo.png"</img>
+		</div>
+		<div id="footer_right">
+			<button	ng-click="close()">
+				{{l10n.TROUBLESHOOT_CLOSE}}
+			</button>
+		</div>
+	</div>
+
+	<script src="lib/devices/lib/core/lib/third_party/angular/angular.js"></script>
+	<script src="lib/devices/lib/core/lib/third_party/angular/angular-resource.js"></script>
+
+	<script src="js/ng-app.js"></script>
+	<script src="js/ng-controllers.js"></script>
+	<script src="js/ng-directives.js"></script>
+	<script src="js/ng-filters.js"></script>
+	<script src="js/ng-services.js"></script>
+</body>
+
+</html>

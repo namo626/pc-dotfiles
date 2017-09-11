@@ -1,0 +1,25 @@
+<div ng-show="unifying.state['deviceToPair']">
+	<h3>
+		{{
+			l10n.format(l10n['RESTART_TITLE_1'], {
+				DEVICE_NAME: unifying['state']['deviceToPair']['name']
+			})
+		}}
+	</h3>
+</div>
+<div ng-hide="unifying.state['deviceToPair']">
+	<h3>{{l10n.RESTART_TITLE_2}}
+</div>
+
+<ol class="lowered">
+	<li>{{l10n.RESTART_STEP_1}}</li>
+	<li>{{l10n.RESTART_STEP_2}}</li>
+</ol>
+
+<img id="restartImg" src="img/restart.png"></img>
+
+<div ng-show="unifying.state['deviceToPair']">
+	<button ng-click="unifying['state'].skipDevice()">
+		{{l10n.RESTART_SKIP_DEVICE}}
+	</button>
+</div>

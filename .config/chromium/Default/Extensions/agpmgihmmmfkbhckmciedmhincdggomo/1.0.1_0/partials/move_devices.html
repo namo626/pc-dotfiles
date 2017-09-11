@@ -1,0 +1,12 @@
+<h3>{{l10n.MOVE_DEVICES_TITLE}}</h3>
+
+<p class="lowered">{{l10n.MOVE_DEVICES_DEVICE_LIST}}<br/>
+{{l10n.MOVE_DEVICES_TIP}}</p>
+
+<ul>
+	<li ng-repeat="device in unifying['removedDevices']">
+		{{device.name}}
+	</li>
+</ul>
+
+<p>{{l10n.MOVE_DEVICES_OK}}</p>

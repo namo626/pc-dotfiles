@@ -1,0 +1,168 @@
+[09/11/17, 11:32:17:586] info: ╔════════════════════════════════════════════════════════════════════════════╗
+[09/11/17, 11:32:17:587] info: ║      Slack 2.7.1, linux 4.9.48-1-lts on x64 at 09/11/17, 11:32:17:581      ║
+[09/11/17, 11:32:17:588] info: ╚════════════════════════════════════════════════════════════════════════════╝
+[09/11/17, 11:32:17:728] info: Initializing local storage instance at path: /home/namo/.config/Slack/local-settings.json
+[09/11/17, 11:32:17:869] info: TraceRecorder: setting up trace recorder, trace will be stored under /home/namo/.config/Slack/logs/recorded-trace
+[09/11/17, 11:32:17:974] info: TranslationLookup: locale set to en-US for browser
+[09/11/17, 11:32:18:064] warn: BrowserStore: Couldn't access keychain, make note of it
+[09/11/17, 11:32:18:070] info: Store: persist/REHYDRATE
+[09/11/17, 11:32:18:072] info: BrowserStore: Let's migrate Redux state
+[09/11/17, 11:32:18:073] info: Initializing local storage instance at path: /home/namo/.config/Slack/redux-state.json
+[09/11/17, 11:32:18:074] info: BrowserStore: Finished migration, make a note of it
+[09/11/17, 11:32:18:076] info: Store: COMPLETED
+{ redux: true, macgap: false }
+[09/11/17, 11:32:18:239] error: Couldn't get Linux distro info
+{ message: '',
+  stack: 'Error\n    at /usr/lib/slack/resources/app.asar/src/browser/main.ts:295:23\n    at Generator.next (<anonymous>)\n    at fulfilled (/usr/lib/slack/resources/app.asar/node_modules/tslib/tslib.js:93:62)' }
+[09/11/17, 11:32:18:333] info: Tray Handler: Showing a tray balloon with title: Welcome to Slack!
+[09/11/17, 11:32:18:338] info: Store: UPDATE_SETTINGS
+{ isDevMode: false,
+  appVersion: '2.7.1',
+  versionName: 'YS',
+  devEnv: null,
+  resourcePath: '/usr/lib/slack/resources/app.asar',
+  launchedWithLink: null,
+  webappSrcPath: null,
+  webappParams: null,
+  launchOnStartup: false,
+  releaseChannel: 'prod',
+  openDevToolsOnStart: false,
+  logFile: null,
+  pretendNotReallyWindows10: false,
+  isAeroGlassEnabled: false,
+  platformVersion: { major: 4, minor: 9, build: 48 },
+  isTitleBarHidden: false,
+  linux: { os: '', release: '', desktopEnvironment: '' } }
+[09/11/17, 11:32:18:341] info: Store: UPDATE_SETTINGS
+{ hasRunApp: true }
+[09/11/17, 11:32:18:347] info: Store: ADD_WINDOW
+{ id: 1, type: 'MAIN' }
+[09/11/17, 11:32:18:350] info: Loading windowMetrics
+[09/11/17, 11:32:18:351] info: Store: SAVE_WINDOW_SETTINGS
+{ position: [ 452, 127 ], size: [ 1355, 1016 ] }
+[09/11/17, 11:32:18:363] info: Store: UPDATE_SETTINGS
+{ PrefSSBFileDownloadPath: '/home/namo/Downloads' }
+[09/11/17, 11:32:18:365] info: DownloadListener: Downloads directory set to /home/namo/Downloads
+[09/11/17, 11:32:18:367] info: App: Welcome to Slack 2.7.1 x64
+[09/11/17, 11:32:18:368] info: App load time: 857ms
+[09/11/17, 11:32:18:369] info: Store: SET_FULL_SCREEN
+[09/11/17, 11:32:19:226] info: Store: SET_NETWORK_STATUS online
+[09/11/17, 11:32:19:240] info: Main window finished load. Launched on login: false
+[09/11/17, 11:32:19:253] info: Store: APP_STARTED
+[09/11/17, 11:32:20:341] info: Store: SAVE_WINDOW_SETTINGS
+{ size: [ 1441, 599 ],
+  position: [ 801, 654 ],
+  isMaximized: false }
+[09/11/17, 11:32:20:886] info: Store: page-loaded
+[09/11/17, 11:34:51:326] info: Store: page-loaded
+[09/11/17, 11:35:01:323] info: Store: page-loaded
+[09/11/17, 11:35:11:994] info: Store: page-loaded
+[09/11/17, 11:35:25:276] info: Store: page-loaded
+[09/11/17, 11:36:45:096] info: Store: ADD_NEW_TEAM
+{ id: 'U6U3U8B1A',
+  name: '[REDACTED]',
+  team_id: 'T6S4SN5R8',
+  team_name: '[REDACTED]',
+  team_url: '[REDACTED]' }
+[09/11/17, 11:36:45:107] info: Store: SET_LOGIN_DIALOG
+[09/11/17, 11:36:47:770] info: Store: page-loaded
+[09/11/17, 11:36:47:941] info: Store: SELECT_CHANNEL C6S6K6SSY
+[09/11/17, 11:36:47:947] info: Store: UPDATE_TEAM_LOCALE
+{ locale: 'en-US', teamId: 'T6S4SN5R8' }
+[09/11/17, 11:36:47:983] info: Store: UPDATE_TEAM_THEME
+{ theme: 
+   { column_bg: '#4D394B',
+     menu_bg: '#3E313C',
+     active_item: '#4C9689',
+     active_item_text: '#FFFFFF',
+     hover_item: '#3E313C',
+     text_color: '#FFFFFF',
+     active_presence: '#38978D',
+     badge: '#EB4D5C' },
+  teamId: 'T6S4SN5R8' }
+[09/11/17, 11:36:48:519] info: Store: UPDATE_TEAM_ICONS
+{ icons: false, teamId: 'T6S4SN5R8' }
+[09/11/17, 11:36:48:751] info: Store: UPDATE_TEAM_LOCALE
+{ locale: 'en-US', teamId: 'T6S4SN5R8' }
+[09/11/17, 11:36:48:858] info: Store: webapp-loaded
+[09/11/17, 11:36:49:189] info: Store: [7] Store an API token for a team
+[09/11/17, 11:37:06:463] info: Store: SELECT_CHANNEL C6S4TG5UJ
+[09/11/17, 11:37:24:285] info: Store: SAVE_WINDOW_SETTINGS
+{ size: [ 768, 1215 ], position: [ 17, 38 ], isMaximized: false }
+[09/11/17, 11:37:29:810] info: Store: SAVE_WINDOW_SETTINGS
+{ size: [ 767, 1215 ],
+  position: [ 34, 385 ],
+  isMaximized: false }
+[09/11/17, 11:37:34:957] info: Store: SAVE_WINDOW_SETTINGS
+{ size: [ 767, 1215 ],
+  position: [ 388, 88 ],
+  isMaximized: false }
+[09/11/17, 11:37:37:828] info: Store: SAVE_WINDOW_SETTINGS
+{ size: [ 1770, 1161 ],
+  position: [ 388, 88 ],
+  isMaximized: false }
+[09/11/17, 11:37:41:357] info: Store: SAVE_WINDOW_SETTINGS
+{ size: [ 1770, 1161 ],
+  position: [ 304, 44 ],
+  isMaximized: false }
+[09/11/17, 11:38:07:480] info: Store: SHOW_WEBAPP_DIALOG
+{ dialogType: 'prefs' }
+[09/11/17, 11:39:16:987] info: Store: UPDATE_SETTINGS
+{ PrefSSBFileDownloadPath: '/home/namo/MEGA/Documents (GT)/PHYS 2232' }
+[09/11/17, 11:40:18:365] info: Store: [2] Start a download
+[09/11/17, 11:40:18:375] info: DownloadListener: Starting download for file F706LEBGR
+[09/11/17, 11:40:18:377] info: Store: [3] Update an existing download
+[09/11/17, 11:40:18:546] info: Got will-download event for file F706LEBGR
+[09/11/17, 11:40:18:553] info: DownloadListener: Tracking download for
+{ id: 'F706LEBGR', teamId: 'T6S4SN5R8' }
+[09/11/17, 11:40:18:556] info: Store: [3] Update an existing download
+[09/11/17, 11:40:18:562] info: Store: [3] Update an existing download
+[09/11/17, 11:40:18:641] info: Store: [3] Update an existing download
+[09/11/17, 11:40:18:646] info: Store: [3] Update an existing download
+[09/11/17, 11:40:18:652] info: Store: [3] Update an existing download
+[09/11/17, 11:40:18:764] info: Store: [3] Update an existing download
+[09/11/17, 11:40:18:813] info: Download completed { id: 'F706LEBGR', teamId: 'T6S4SN5R8' } completed
+[09/11/17, 11:40:18:816] info: Store: [3] Update an existing download
+[09/11/17, 11:40:31:662] info: Store: [2] Start a download
+[09/11/17, 11:40:31:665] info: DownloadListener: Starting download for file F714ZRRKQ
+[09/11/17, 11:40:31:666] info: Store: [3] Update an existing download
+[09/11/17, 11:40:31:888] info: Got will-download event for file F714ZRRKQ
+[09/11/17, 11:40:31:890] info: DownloadListener: Tracking download for
+{ id: 'F714ZRRKQ', teamId: 'T6S4SN5R8' }
+[09/11/17, 11:40:31:891] info: Store: [3] Update an existing download
+[09/11/17, 11:40:31:893] info: Store: [3] Update an existing download
+[09/11/17, 11:40:31:969] info: Store: [3] Update an existing download
+[09/11/17, 11:40:31:974] info: Store: [3] Update an existing download
+[09/11/17, 11:40:31:978] info: Store: [3] Update an existing download
+[09/11/17, 11:40:32:044] info: Store: [3] Update an existing download
+[09/11/17, 11:40:32:088] info: Download completed { id: 'F714ZRRKQ', teamId: 'T6S4SN5R8' } completed
+[09/11/17, 11:40:32:091] info: Store: [3] Update an existing download
+[09/11/17, 11:40:41:808] info: Attempted to close the window, hiding due to run from tray
+[09/11/17, 11:40:41:813] info: Store: UPDATE_SETTINGS
+{ hasRunFromTray: true }
+[09/11/17, 11:40:41:822] info: Store: SHOW_TRAY_BALLOON
+{ title: 'Why didn’t Slack quit?',
+  content: 'Slack’s set to stay running in the notification area. To change this, visit Preferences > Linux App.' }
+[09/11/17, 11:40:41:832] info: Tray Handler: Showing a tray balloon with title: Why didn’t Slack quit?
+[09/11/17, 11:40:44:352] info: Store: FOREGROUND_APP
+[09/11/17, 11:40:45:367] info: Store: SAVE_WINDOW_SETTINGS
+{ size: [ 1441, 599 ],
+  position: [ 801, 654 ],
+  isMaximized: false }
+[09/11/17, 11:40:49:756] info: Attempted to close the window, hiding due to run from tray
+[09/11/17, 11:48:19:957] info: Store: FOREGROUND_APP
+[09/11/17, 11:48:20:967] info: Store: SAVE_WINDOW_SETTINGS
+{ size: [ 2225, 1215 ],
+  position: [ 17, 38 ],
+  isMaximized: false }
+[09/11/17, 11:48:36:234] info: Store: SELECT_CHANNEL C6S4TEQ6N
+[09/11/17, 11:48:44:534] info: Store: SELECT_CHANNEL C6S6K70GL
+[09/11/17, 11:48:49:806] info: Store: SELECT_CHANNEL C6S6K6SSY
+[09/11/17, 11:48:58:300] info: Store: SELECT_CHANNEL C6S4TG5UJ
+[09/11/17, 11:50:26:698] info: Store: SELECT_CHANNEL C6S6K6SSY
+[09/11/17, 12:10:38:171] info: Store: FOREGROUND_APP
+[09/11/17, 12:12:25:464] info: Store: FOREGROUND_APP
+[09/11/17, 12:12:25:469] info: Store: FOREGROUND_APP
+[09/11/17, 12:12:25:513] info: Store: FOREGROUND_APP
+[09/11/17, 12:12:40:566] info: Store: SELECT_CHANNEL C6S4TEQ6N
+[09/11/17, 12:13:05:875] info: Store: SELECT_CHANNEL C6S4TG5UJ

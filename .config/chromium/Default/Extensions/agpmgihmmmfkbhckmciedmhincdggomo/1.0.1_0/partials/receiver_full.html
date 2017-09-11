@@ -1,0 +1,19 @@
+<h3>{{l10n.RECEIVER_FULL_TITLE}}</h3>
+
+<p class="lowered">{{l10n.RECEIVER_FULL_INFO}}</p>
+
+<p>{{l10n.RECEIVER_FULL_CHOOSE}}</p>
+
+<select ng-model="device"
+		ng-options="device['name'] for device in unifying['receivers'][0]['hidppChildren']"
+		ng-change="unifying['state'].onSelectDevice(device)">
+	<option disabled selected value="">{{l10n.RECEIVER_FULL_SELECT}}</option>
+</select>
+
+<p>{{l10n.RECEIVER_FULL_TIP}}</p>
+
+<a href="#" ng-click="unifying.replacing_device()">
+	<img id="receiver_full_img1" src="img/help.png"></img>
+</a>
+
+<img id="receiver_full_img2" src="img/warning.png"></img>

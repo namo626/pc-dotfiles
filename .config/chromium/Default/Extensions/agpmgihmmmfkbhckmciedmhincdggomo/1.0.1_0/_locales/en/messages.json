@@ -1,0 +1,10 @@
+{
+   "application_description": {
+      "description": "The description of the application, displayed in the web store.",
+      "message": "Connect up to six Logitech mice and keyboards to a single Unifying USB receiver."
+   },
+   "application_title": {
+      "description": "The title of the application, displayed in the web store.",
+      "message": "Logitech Unifying for Chrome"
+   }
+}

@@ -1,0 +1,16 @@
+<h3>{{l10n.DEVICE_PAIRED_TITLE}}</h3>
+
+<p class="lowered">
+	<span ng-show="unifying.state['device'].name">
+		{{
+			l10n.format(l10n['DEVICE_PAIRED_DEVICE_1'], {
+				DEVICE_NAME: unifying['state']['device']['name']
+			})
+		}}
+	</span>
+	<span ng-hide="unifying.state['device'].name">
+		{{l10n.DEVICE_PAIRED_DEVICE_2}}
+	</span>
+</p>
+
+<img src="img/ok.png"></img>

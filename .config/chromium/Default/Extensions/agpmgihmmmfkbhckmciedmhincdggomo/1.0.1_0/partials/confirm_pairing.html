@@ -1,0 +1,126 @@
+<div ng-show="unifying.state['device'].name">
+	<h3 id="device_detected">
+		{{
+			l10n.format(l10n['CONFIRM_TITLE'], {
+				DEVICE_NAME: unifying['state']['device']['name']
+			})
+		}}
+	</h3>
+</div>
+
+<div ng-switch on="unifying.state['device'].rapDeviceType">
+	<div ng-switch-when="1">
+		<div ng-hide="unifying.state['device'].name">
+			<h3>
+				{{l10n.CONFIRM_KEYBOARD}}
+			</h3>
+		</div>
+		<p class="lowered">{{l10n.CONFIRM_KEYBOARD_1}}</p>
+		<input type="text"></input>
+		<p>{{l10n.CONFIRM_KEYBOARD_2}}</p>
+	</div>
+	<div ng-switch-when="2">
+		<div ng-hide="unifying.state['device'].name">
+			<h3>
+				{{l10n.CONFIRM_MOUSE}}
+			</h3>
+		</div>
+		<p class="lowered">{{l10n.CONFIRM_MOUSE_1}}</p>
+		<p>{{l10n.CONFIRM_MOUSE_2}}</p>
+	</div>
+	<div ng-switch-when="3">
+		<div ng-hide="unifying.state['device'].name">
+			<h3>
+				{{l10n.CONFIRM_DEVICE}}
+			</h3>
+		</div>
+		<p class="lowered">{{l10n.CONFIRM_DEVICE_1}}</p>
+	</div>
+	<div ng-switch-when="4">
+		<div ng-hide="unifying.state['device'].name">
+			<h3>
+				{{l10n.CONFIRM_DEVICE}}
+			</h3>
+		</div>
+		<p class="lowered">{{l10n.CONFIRM_DEVICE_1}}</p>
+	</div>
+	<div ng-switch-when="5">
+		<div ng-hide="unifying.state['device'].name">
+			<h3>
+				{{l10n.CONFIRM_DEVICE}}
+			</h3>
+		</div>
+		<p class="lowered">{{l10n.CONFIRM_DEVICE_1}}</p>
+	</div>
+	<div ng-switch-when="6">
+		<div ng-hide="unifying.state['device'].name">
+			<h3>
+				{{l10n.CONFIRM_DEVICE}}
+			</h3>
+		</div>
+		<p class="lowered">{{l10n.CONFIRM_DEVICE_1}}</p>
+	</div>
+	<div ng-switch-when="7">
+		<div ng-hide="unifying.state['device'].name">
+			<h3>
+				{{l10n.CONFIRM_DEVICE}}
+			</h3>
+		</div>
+		<p class="lowered">{{l10n.CONFIRM_DEVICE_1}}</p>
+	</div>
+	<div ng-switch-when="8">
+		<div ng-hide="unifying.state['device'].name">
+			<h3>
+				{{l10n.CONFIRM_TRACKBALL}}
+			</h3>
+		</div>
+		<p class="lowered">{{l10n.CONFIRM_TRACKBALL_1}}</p>
+	</div>
+	<div ng-switch-when="9">
+		<div ng-hide="unifying.state['device'].name">
+			<h3>
+				{{l10n.CONFIRM_DEVICE}}
+			</h3>
+		</div>
+		<p class="lowered">{{l10n.CONFIRM_DEVICE_1}}</p>
+	</div>
+	<div ng-switch-when="10">
+		<div ng-hide="unifying.state['device'].name">
+			<h3>
+				{{l10n.CONFIRM_DEVICE}}
+			</h3>
+		</div>
+		<p class="lowered">{{l10n.CONFIRM_DEVICE_1}}</p>
+	</div>
+	<div ng-switch-when="11">
+		<div ng-hide="unifying.state['device'].name">
+			<h3>
+				{{l10n.CONFIRM_DEVICE}}
+			</h3>
+		</div>
+		<p class="lowered">{{l10n.CONFIRM_DEVICE_1}}</p>
+	</div>
+	<div ng-switch-when="12">
+		<div ng-hide="unifying.state['device'].name">
+			<h3>
+				{{l10n.CONFIRM_DEVICE}}
+			</h3>
+		</div>
+		<p class="lowered">{{l10n.CONFIRM_DEVICE_1}}</p>
+	</div>	
+</div>
+
+<span>
+	<input id="yes" type="radio" ng-click="unifying['state'].yes()">
+		{{l10n.CONFIRM_YES}}
+	</input>
+	<input id="no" type="radio" ng-click="unifying['state'].no()">
+		{{l10n.CONFIRM_NO}}
+	</input>
+</span>
+
+<p>
+	<a href="#" ng-click="unifying.correct_device()">
+		<img id="confirm_pairing_img" src="img/help.png"></img>
+	</a>
+</p>

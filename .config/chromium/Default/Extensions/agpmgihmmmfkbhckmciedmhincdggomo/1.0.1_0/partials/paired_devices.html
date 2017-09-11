@@ -1,0 +1,18 @@
+<h3>{{l10n.PAIRED_DEVICES_TITLE}}</h3>
+
+<p>{{l10n.PAIRED_DEVICES_LIST}}</p>
+
+<ul>
+	<li ng-repeat='device in unifying.receivers[0].children'
+		ng-show='device.isHidpp === true'>
+		{{device.name}}
+	</li>
+</ul>
+
+<p>
+	{{
+		l10n.format(l10n['PAIRED_DEVICES_TIP'], {
+			FREE_SLOTS: unifying['state']['freeSlots']
+		})
+	}}
+</p>
