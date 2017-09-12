@@ -1,7 +1,9 @@
 import XMonad
+import XMonad.Layout.Hidden
 import XMonad.Actions.DynamicWorkspaces (removeWorkspace)
 import XMonad.Actions.CycleWS
 import XMonad.Actions.CycleRecentWS
+import XMonad.Actions.Navigation2D
 import XMonad.Util.NamedScratchpad
 import XMonad.Prompt
 import XMonad.Layout.ResizableTile
@@ -37,7 +39,7 @@ import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 
 main = do 
-    xmonad =<< statusBar "xmobar" myPP toggleStrutsKey (dynamicProjects projects $ fullscreenSupport $ myConfig)
+    xmonad =<< statusBar "xmobar" myPP toggleStrutsKey (withNavigation2DConfig def $ dynamicProjects projects $ fullscreenSupport $ myConfig)
 
 
 myConfig = def {
@@ -54,6 +56,7 @@ myConfig = def {
 
 myTerminal = "terminator"
 altMask = mod1Mask
+addTopBar = noFrillsDeco shrinkText topBarTheme
 
 myLayoutHook = onWorkspace "misc" miscLayout
              $ onWorkspace "docs" docsLayout
@@ -66,10 +69,12 @@ tiledTabs = tallTabs def {hNMaster = 2}
 
 mainLayout = mkToggle (single FULL)
                       $ windowNavigation
+                      $ addTopBar
                       $ addTabs shrinkText myTabTheme 
                       $ subLayout [] (Simplest) 
                       $ spacingWithEdge 13
-                      $ ResizableTall 1 (3/100) (56/100) [] ||| Full ||| GridRatio (3/3)
+                      $ hiddenWindows
+                      $ ResizableTall 1 (3/100) (56/100) [] ||| Full ||| GridRatio (3/3) ||| Grid
 --
 miscLayout = windowNavigation
            $ addTabs shrinkText myTabTheme 
@@ -168,11 +173,22 @@ myTabTheme = def { fontName = "xft:xos4 Terminus:style=bold:size=14"
                  , activeBorderColor = "#665c54"
                  }
 
+topBarTheme = def
+    { inactiveBorderColor   = "#3c3836"
+    , inactiveColor         = "#3c3836"
+    , inactiveTextColor     = "#3c3836"
+    , activeBorderColor     = "#458588"
+    , activeColor           = "#458588"
+    , activeTextColor       = "#458588"
+    , urgentBorderColor     = red
+    , urgentTextColor       = yellow
+    , decoHeight            = 15
+    }
+
 
 myManageHook = composeAll
                 [ name =? "Terminator Preferences" --> doCenterFloat
                 , className =? "Thunar" --> doCenterFloat]
-              
                 where name = stringProperty "WM_NAME"
          
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
@@ -180,15 +196,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm .|. controlMask, xK_l), sendMessage $ pullGroup R)
             , ((modm .|. controlMask, xK_k), sendMessage $ pullGroup U)
             , ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
-            , ((modm, xK_d), spawn "rofi -show run")
+            , ((modm, xK_d), spawn "rofi -show run -font \"Droid Sans Mono for Powerline 20\"")
             , ((modm .|. altMask, xK_l), spawn "i3lock -c 000000") 
             , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
             , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
             , ((modm .|. controlMask, xK_i), withFocused (sendMessage . UnMergeAll))
-            , ((altMask, xK_j), sendMessage $ Go D)
-            , ((altMask, xK_k), sendMessage $ Go U)
-            , ((altMask, xK_h), sendMessage $ Go L)
-            , ((altMask, xK_l), sendMessage $ Go R)
+            --, ((altMask, xK_j), sendMessage $ Go D)
+            --, ((altMask, xK_k), sendMessage $ Go U)
+            --, ((altMask, xK_h), sendMessage $ Go L)
+            --, ((altMask, xK_l), sendMessage $ Go R)
             , ((modm, xK_s), switchProjectPrompt myPrompt)
             , ((modm, xK_slash), shiftToProjectPrompt myPrompt)
             , ((modm, xK_z), sendMessage MirrorExpand)
@@ -199,15 +215,28 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm .|. shiftMask, xK_BackSpace), removeWorkspace)
             , ((modm, xK_n), moveToNewGroupUp)
             , ((modm, xK_p), splitGroup)
-            , ((modm, xK_Caps_Lock), sequence_ $ [sendMessage ToggleStruts, sendMessage $ Toggle FULL])
-            , ((modm .|. shiftMask, xK_Caps_Lock), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup L]) 
-            , ((controlMask .|. shiftMask, xK_Caps_Lock), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup D]) 
-            , ((modm .|. controlMask, xK_Left), sendMessage $ Swap L)
+            , ((modm, xK_grave), sequence_ $ [sendMessage ToggleStruts, sendMessage $ Toggle FULL])
+            , ((modm .|. shiftMask, xK_Tab), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup L]) 
+            , ((controlMask .|. shiftMask, xK_Tab), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup D]) 
+
+            --easy swapping of windows
+            , ((modm .|. controlMask, xK_Left), windowSwap L True)
+            , ((modm .|. controlMask, xK_Right), windowSwap R True)
+            , ((modm .|. controlMask, xK_Up), windowSwap U True)
+            , ((modm .|. controlMask, xK_Down), windowSwap D True)
+            , ((altMask, xK_j), windowGo D True)
+            , ((altMask, xK_k), windowGo U True)
+            , ((altMask, xK_h), windowGo L True)
+            , ((altMask, xK_l), windowGo R True)
 
             --easy switching of workspaces
             , ((altMask, xK_Left), prevWS)
             , ((altMask, xK_Right), nextWS)
             , ((altMask, xK_Tab), cycleRecentWS [xK_Alt_L] xK_Tab xK_grave)
+
+            --hiding windows
+            , ((modm, xK_backslash), withFocused hideWindow)
+            , ((modm .|. shiftMask, xK_backslash), popNewestHiddenWindow)
             ]
 
 myPrompt = def
@@ -233,15 +262,4 @@ blue    = "#268bd2"
 cyan    = "#2aa198"
 green = "#859900"
 
---topBarTheme = def
---    { inactiveBorderColor   = base03
---    , inactiveColor         = base03
---    , inactiveTextColor     = base03
---    , activeBorderColor     = blue
---    , activeColor           = blue
---    , activeTextColor       = blue
---    , urgentBorderColor     = red
---    , urgentTextColor       = yellow
---    , decoHeight            = 10
---    }
---
+
