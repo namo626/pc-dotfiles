@@ -1,3 +1,3 @@
-2017/09/11-00:23:11.182 13164 Reusing MANIFEST /home/namo/.config/chromium/Default/IndexedDB/https_www.google.com_0.indexeddb.leveldb/MANIFEST-000001
-2017/09/11-00:23:11.182 13164 Recovering log #3
-2017/09/11-00:23:11.183 13164 Reusing old log /home/namo/.config/chromium/Default/IndexedDB/https_www.google.com_0.indexeddb.leveldb/000003.log 
+2017/09/12-14:55:28.007 29088 Reusing MANIFEST /home/namo/.config/chromium/Default/IndexedDB/https_www.google.com_0.indexeddb.leveldb/MANIFEST-000001
+2017/09/12-14:55:28.007 29088 Recovering log #3
+2017/09/12-14:55:28.007 29088 Reusing old log /home/namo/.config/chromium/Default/IndexedDB/https_www.google.com_0.indexeddb.leveldb/000003.log 

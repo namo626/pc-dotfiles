@@ -53,8 +53,18 @@ xss-lock -- i3lock -n -c 000000 &
 setxkbmap -layout us,th -option grp:lctrl_lshift_toggle
 xxkb &
 megasync &
-xbindkeys &
+#redshift-gtk
+xbindkeys
+xset s 1800 1800
+xset q 1810 1810 1810
 compton --config ~/.compton.conf -b
 feh --bg-scale ~/Pictures/peak.jpg &
 stalonetray &
-exec xmonad
+
+#choosing between different wms
+session=${1:-xmonad}
+case $session in 
+  xmonad ) exec xmonad;;
+  i3 ) exec i3;;
+  * ) exec xmonad;;
+esac

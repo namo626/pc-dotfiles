@@ -30,7 +30,6 @@ import qualified XMonad.StackSet as W
 import XMonad.Layout.Groups.Helpers
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.Grid
---import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
 import XMonad.Layout.Fullscreen
 import XMonad.Hooks.InsertPosition
 import XMonad.Layout.Groups.Examples
@@ -58,41 +57,48 @@ myTerminal = "terminator"
 altMask = mod1Mask
 addTopBar = noFrillsDeco shrinkText topBarTheme
 
-myLayoutHook = onWorkspace "misc" miscLayout
-             $ onWorkspace "docs" docsLayout
+myLayoutHook = mkToggle (single FULL)
+             $ windowNavigation
+             $ addTopBar
+             $ onWorkspace "misc" miscLayout 
+             $ onWorkspace "docs" docsLayout 
              $ onWorkspace "hw" hwLayout
-             $ onWorkspace "free" ((ThreeColMid 1 (3/100) (1/2)) ||| ResizableTall 1 (3/100) (56/100) [])
-             
-             $ mainLayout
+             $ onWorkspace "free" fullNoTopBar
+             $ mainLayout 
 
 tiledTabs = tallTabs def {hNMaster = 2}
+fullNoTopBar = addTabs shrinkText myTabTheme 
+             $ subLayout [] (Simplest) 
+             $ spacingWithEdge 13
+             $ hiddenWindows
+             $ Full
 
-mainLayout = mkToggle (single FULL)
-                      $ windowNavigation
-                      $ addTopBar
-                      $ addTabs shrinkText myTabTheme 
-                      $ subLayout [] (Simplest) 
-                      $ spacingWithEdge 13
-                      $ hiddenWindows
-                      $ ResizableTall 1 (3/100) (56/100) [] ||| Full ||| GridRatio (3/3) ||| Grid
---
-miscLayout = windowNavigation
-           $ addTabs shrinkText myTabTheme 
+mainLayout = addTabs shrinkText myTabTheme 
+           $ subLayout [] (Simplest) 
+           $ spacingWithEdge 13
+           $ hiddenWindows
+           $ ResizableTall 1 (3/100) (56/100) [] ||| Full
+
+octaveLayout = addTabs shrinkText myTabTheme 
+             $ subLayout [] (Simplest) 
+             $ spacingWithEdge 13
+             $ hiddenWindows
+             $ ResizableTall 1 (3/100) (50/100) [] ||| Full ||| GridRatio (3/3) ||| Grid
+
+miscLayout = addTabs shrinkText myTabTheme 
            $ subLayout [] (Simplest) 
            $ spacingWithEdge 9 
            $ Circle ||| Full
 
-docsLayout = windowNavigation
-                      $ addTabs shrinkText myTabTheme 
-                      $ subLayout [] (Simplest) 
-                      $ spacingWithEdge 15
-                      $ Full ||| ResizableTall 1 (3/100) (35/100) [] 
+docsLayout = addTabs shrinkText myTabTheme 
+           $ subLayout [] (Simplest) 
+           $ spacingWithEdge 15
+           $ ResizableTall 1 (3/100) (40/100) [] ||| Full
 
-hwLayout = windowNavigation
-                      $ addTabs shrinkText myTabTheme 
-                      $ subLayout [] (Simplest) 
-                      $ spacingWithEdge 9 
-                      $ ResizableTall 1 (3/100) (50/100) [] ||| Full 
+hwLayout = addTabs shrinkText myTabTheme 
+           $ subLayout [] (Simplest) 
+           $ spacingWithEdge 9 
+           $ ResizableTall 1 (3/100) (50/100) [] ||| Full
 
 --
 --scratchpads = [ NS "thunar" "thunar" (title =? "thunar") defaultFloating]
@@ -102,7 +108,7 @@ toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
 myWorkspaces :: Forest String
 myWorkspaces = 
-    [ Node "web" []
+    [ Node "conf" []
     , Node "term" []
     , Node "prgm" []
     , Node "hw" []
@@ -110,7 +116,7 @@ myWorkspaces =
     , Node "matlab" []
     , Node "misc" []
     , Node "game" []
-    , Node "free" []
+    , Node "web" []
     ]
 
 projects :: [Project]
@@ -127,7 +133,7 @@ projects =
                                              spawn "terminator"
               }
 
-    , Project { projectName = "web"
+    , Project { projectName = "conf"
               , projectDirectory = "~/"
               , projectStartHook = Just $ do spawn "firefox"
                                              spawn "terminator"
@@ -155,9 +161,9 @@ projects =
 
               }
     
-    , Project { projectName = "free"
+    , Project { projectName = "web"
               , projectDirectory = "~/"
-              , projectStartHook = Just $ do spawn "chromium"
+              , projectStartHook = Just $ do spawn "firefox"
 
               }
 
@@ -220,10 +226,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((controlMask .|. shiftMask, xK_Tab), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup D]) 
 
             --easy swapping of windows
-            , ((modm .|. controlMask, xK_Left), windowSwap L True)
-            , ((modm .|. controlMask, xK_Right), windowSwap R True)
-            , ((modm .|. controlMask, xK_Up), windowSwap U True)
-            , ((modm .|. controlMask, xK_Down), windowSwap D True)
+            , ((modm .|. shiftMask, xK_h), windowSwap L True)
+            , ((modm .|. shiftMask, xK_l), windowSwap R True)
+            , ((modm .|. shiftMask, xK_k), windowSwap U True)
+            , ((modm .|. shiftMask, xK_j), windowSwap D True)
             , ((altMask, xK_j), windowGo D True)
             , ((altMask, xK_k), windowGo U True)
             , ((altMask, xK_h), windowGo L True)

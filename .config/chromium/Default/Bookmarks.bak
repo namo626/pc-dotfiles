@@ -625,10 +625,10 @@
             "date_added": "12998037726146000",
             "id": "15",
             "meta_info": {
-               "last_visited_desktop": "13149546140431572"
+               "last_visited_desktop": "13149663896398554"
             },
             "name": "YouTube - Broadcast Yourself.",
-            "sync_transaction_version": "12",
+            "sync_transaction_version": "16",
             "type": "url",
             "url": "http://www.youtube.com/"
          }, {
@@ -1871,7 +1871,7 @@
          "name": "Other bookmarks",
          "type": "folder"
       },
-      "sync_transaction_version": "12",
+      "sync_transaction_version": "16",
       "synced": {
          "children": [ {
             "date_added": "13112799958559217",
