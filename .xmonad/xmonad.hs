@@ -51,54 +51,68 @@ myConfig = def {
     , keys = myKeys <+> keys def
     , XMonad.workspaces = toWorkspaces myWorkspaces
     --, focusFollowsMouse = False
+    --, startupHook = spawn "stalonetray"
     } 
 
 myTerminal = "terminator"
 altMask = mod1Mask
 addTopBar = noFrillsDeco shrinkText topBarTheme
 
-myLayoutHook = mkToggle (single FULL)
+myLayoutHook = avoidStruts $ mkToggle (single FULL)
              $ windowNavigation
-             $ addTopBar
              $ onWorkspace "misc" miscLayout 
              $ onWorkspace "docs" docsLayout 
              $ onWorkspace "hw" hwLayout
-             $ onWorkspace "free" fullNoTopBar
+             $ onWorkspace "free" Full
              $ mainLayout 
 
 tiledTabs = tallTabs def {hNMaster = 2}
-fullNoTopBar = addTabs shrinkText myTabTheme 
-             $ subLayout [] (Simplest) 
-             $ spacingWithEdge 13
-             $ hiddenWindows
-             $ Full
+mainLayout = 
+    mkToggle (single FULL)
+    $ windowNavigation
+    $ addTopBar
+    $ addTabs shrinkText myTabTheme 
+    $ subLayout [] (Simplest) 
+    $ spacingWithEdge 13
+    $ hiddenWindows
+    $ ResizableTall 1 (3/100) (56/100) [] ||| Full
 
-mainLayout = addTabs shrinkText myTabTheme 
-           $ subLayout [] (Simplest) 
-           $ spacingWithEdge 13
-           $ hiddenWindows
-           $ ResizableTall 1 (3/100) (56/100) [] ||| Full
+octaveLayout = 
+    mkToggle (single FULL)
+    $ windowNavigation   
+    $ addTopBar
+    $ addTabs shrinkText myTabTheme 
+    $ subLayout [] (Simplest) 
+    $ spacingWithEdge 13
+    $ hiddenWindows
+    $ ResizableTall 1 (3/100) (50/100) [] ||| Full ||| GridRatio (3/3) ||| Grid
 
-octaveLayout = addTabs shrinkText myTabTheme 
-             $ subLayout [] (Simplest) 
-             $ spacingWithEdge 13
-             $ hiddenWindows
-             $ ResizableTall 1 (3/100) (50/100) [] ||| Full ||| GridRatio (3/3) ||| Grid
+miscLayout = 
+    mkToggle (single FULL)
+    $ windowNavigation
+    $ addTopBar
+    $ addTabs shrinkText myTabTheme 
+    $ subLayout [] (Simplest) 
+    $ spacingWithEdge 9 
+    $ Circle ||| Full
 
-miscLayout = addTabs shrinkText myTabTheme 
-           $ subLayout [] (Simplest) 
-           $ spacingWithEdge 9 
-           $ Circle ||| Full
+docsLayout = 
+    mkToggle (single FULL) 
+    $ windowNavigation
+    $ addTopBar
+    $ addTabs shrinkText myTabTheme 
+    $ subLayout [] (Simplest) 
+    $ spacingWithEdge 15
+    $ ResizableTall 1 (3/100) (40/100) [] ||| Full
 
-docsLayout = addTabs shrinkText myTabTheme 
-           $ subLayout [] (Simplest) 
-           $ spacingWithEdge 15
-           $ ResizableTall 1 (3/100) (40/100) [] ||| Full
-
-hwLayout = addTabs shrinkText myTabTheme 
-           $ subLayout [] (Simplest) 
-           $ spacingWithEdge 9 
-           $ ResizableTall 1 (3/100) (50/100) [] ||| Full
+hwLayout = 
+    mkToggle (single FULL)
+    $ windowNavigation
+    $ addTopBar
+    $ addTabs shrinkText myTabTheme 
+    $ subLayout [] (Simplest) 
+    $ spacingWithEdge 9 
+    $ ResizableTall 1 (3/100) (50/100) [] ||| Full
 
 --
 --scratchpads = [ NS "thunar" "thunar" (title =? "thunar") defaultFloating]

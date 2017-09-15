@@ -56,7 +56,7 @@ megasync &
 #redshift-gtk
 xbindkeys
 xset s 1800 1800
-xset q 1810 1810 1810
+xset dpms 1810 1810 1810
 compton --config ~/.compton.conf -b
 feh --bg-scale ~/Pictures/peak.jpg &
 stalonetray &
