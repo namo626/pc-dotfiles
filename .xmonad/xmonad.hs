@@ -1,5 +1,6 @@
 import XMonad
 import XMonad.Layout.Hidden
+import XMonad.Actions.FloatKeys
 import XMonad.Actions.DynamicWorkspaces (removeWorkspace)
 import XMonad.Actions.CycleWS
 import XMonad.Actions.CycleRecentWS
@@ -58,13 +59,19 @@ myTerminal = "terminator"
 altMask = mod1Mask
 addTopBar = noFrillsDeco shrinkText topBarTheme
 
-myLayoutHook = avoidStruts $ mkToggle (single FULL)
-             $ windowNavigation
-             $ onWorkspace "misc" miscLayout 
+myLayoutHook = onWorkspace "misc" miscLayout 
              $ onWorkspace "docs" docsLayout 
              $ onWorkspace "hw" hwLayout
              $ onWorkspace "free" Full
              $ mainLayout 
+
+myScratchpads = 
+    [ NS "terminal" (myTerminal ++ " --role=scratchpad") (stringProperty "WM_WINDOW_ROLE" =? "scratchpad") doCenterFloat
+    , NS "slack" "slack" (stringProperty "WM_NAME" =? "Slack - Honors Physics II (Fall 2017)") doCenterFloat
+    , NS "notes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") doCenterFloat
+    ]
+
+
 
 tiledTabs = tallTabs def {hNMaster = 2}
 mainLayout = 
@@ -114,9 +121,6 @@ hwLayout =
     $ spacingWithEdge 9 
     $ ResizableTall 1 (3/100) (50/100) [] ||| Full
 
---
---scratchpads = [ NS "thunar" "thunar" (title =? "thunar") defaultFloating]
---
 myPP = xmobarPP {ppOrder = \(ws:l:t:_) -> [ws, t]}
 toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
@@ -183,8 +187,8 @@ projects =
 
     ]
                                           
-myTabTheme = def { fontName = "xft:xos4 Terminus:style=bold:size=14"
-                 , decoHeight = 35
+myTabTheme = def { fontName = "xft:xos4 Terminus:style=bold:size=13"
+                 , decoHeight = 32
                  , activeTextColor = "#fbf1c7"
                  , inactiveTextColor = "#ebdbb2"
                  , inactiveColor = "#504945"
@@ -206,9 +210,9 @@ topBarTheme = def
     }
 
 
-myManageHook = composeAll
+myManageHook = (composeAll
                 [ name =? "Terminator Preferences" --> doCenterFloat
-                , className =? "Thunar" --> doCenterFloat]
+                , className =? "Thunar" --> doCenterFloat]) <+> namedScratchpadManageHook myScratchpads
                 where name = stringProperty "WM_NAME"
          
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
@@ -230,7 +234,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm, xK_z), sendMessage MirrorExpand)
             , ((modm, xK_a), sendMessage MirrorShrink)
             , ((modm, xK_g), sequence_ $ [sendMessage $ IncMasterN 1, sendMessage $ pullGroup D, sendMessage $ IncMasterN (-1)])
-            , ((altMask, xK_f), treeselectWorkspace tsDefaultConfig myWorkspaces W.greedyView)
+            -- caused white glitch, ((altMask, xK_f), treeselectWorkspace tsDefaultConfig myWorkspaces W.greedyView)
             --, ((modm, xK_n), namedScratchpadAction scratchpads "thunar")
             , ((modm .|. shiftMask, xK_BackSpace), removeWorkspace)
             , ((modm, xK_n), moveToNewGroupUp)
@@ -257,6 +261,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             --hiding windows
             , ((modm, xK_backslash), withFocused hideWindow)
             , ((modm .|. shiftMask, xK_backslash), popNewestHiddenWindow)
+
+            --scratchpads
+            , ((modm .|. controlMask, xK_n), namedScratchpadAction myScratchpads "terminal")
+            , ((modm .|. controlMask, xK_b), namedScratchpadAction myScratchpads "slack")
+--            , ((modm .|. controlMask, xK_v), namedScratchpadAction myScratchpads "notes")
+
+            --moving floating windows
+            , ((modm,               xK_Down     ), withFocused (keysResizeWindow (-10,-10) (1,1)))
+            , ((modm,               xK_Up     ), withFocused (keysResizeWindow (10,10) (1,1)))
             ]
 
 myPrompt = def

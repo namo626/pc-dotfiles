@@ -8,13 +8,15 @@ position = TopW L 100,
 commands = [
     Run Wireless "wlp3s0" ["-t", "<fc=#fc9113><fn=1> </fn><essid></fc>"] 60,
     Run Cpu ["-t", "<fc=#f4663c><fn=1> </fn><total>%</fc>", "-L", "40", "-H", "60"] 10,
-    Run Memory ["-t", "<fc=#84c9f0><fn=1> </fn><usedratio>%</fc>"] 10,
+    Run CoreTemp ["-t", "<fc=#fabd2f><core0>C°</fc>"] 20,
+    Run Memory ["-t", "<fc=#84c9f0><fn=1> </fn><usedratio>%</fc>"] 10,
     Run DiskU [("/", "<fc=#1cecc0><fn=1> </fn><free></fc>")] ["-t", "Disk"] 30,
+    Run DiskIO [("sda4", "<read>b/s <write>b/s")] [] 10,
     Run BatteryP ["BAT0"] ["-t", "<fc=#fabd2f><acstatus>(<left>%)</fc>", "--", "-O", "<fn=1> </fn>", "-o", "<fn=1> </fn>"] 10,
     Run Date "<fc=#cae91e><fn=1> </fn>%a %_d %b %Y</fc> | <fc=#edf6f4><fn=1> </fn>%-I:%M %p</fc>" "date" 10,
     Run StdinReader,
     Run Com "/bin/bash" ["/home/namo/scripts/vol.sh"] "vol" 10,
     Run Com "/bin/bash" ["/home/namo/scripts/vollogo.sh"] "vollogo" 10],
 alignSep = "}{",
-template = "%StdinReader% }{ <fn=1>%vollogo%</fn> %vol%  %disku%  %cpu%  %memory%  %date% |            "
+template = "%StdinReader% }{ <fn=1>%vollogo%</fn> %vol%  %disku%  %diskio%  %coretemp%  %cpu%  %memory%  %date% |             "
 }
