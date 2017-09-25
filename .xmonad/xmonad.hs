@@ -68,7 +68,7 @@ myLayoutHook = onWorkspace "misc" miscLayout
 myScratchpads = 
     [ NS "terminal" (myTerminal ++ " --role=scratchpad") (stringProperty "WM_WINDOW_ROLE" =? "scratchpad") doCenterFloat
     , NS "slack" "slack" (stringProperty "WM_NAME" =? "Slack - Honors Physics II (Fall 2017)") doCenterFloat
-    , NS "notes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") doCenterFloat
+    --, NS "notes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") doCenterFloat
     ]
 
 
@@ -128,7 +128,7 @@ myWorkspaces :: Forest String
 myWorkspaces = 
     [ Node "conf" []
     , Node "term" []
-    , Node "prgm" []
+    --, Node "prgm" []
     , Node "hw" []
     , Node "docs" []
     , Node "matlab" []
@@ -168,7 +168,7 @@ projects =
 
     , Project { projectName = "docs"
               , projectDirectory = "~/MEGA"
-              , projectStartHook = Just $ do runInTerm "" "ranger"
+              , projectStartHook = Just $ do spawn "okular"
 
               }
 
@@ -201,9 +201,9 @@ topBarTheme = def
     { inactiveBorderColor   = "#3c3836"
     , inactiveColor         = "#3c3836"
     , inactiveTextColor     = "#3c3836"
-    , activeBorderColor     = "#458588"
-    , activeColor           = "#458588"
-    , activeTextColor       = "#458588"
+    , activeBorderColor     = blue --"#458588"
+    , activeColor           = blue --"#458588"
+    , activeTextColor       = blue
     , urgentBorderColor     = red
     , urgentTextColor       = yellow
     , decoHeight            = 15

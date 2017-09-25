@@ -1,14 +1,14 @@
 Config {
 font = "xft:Droid Sans Mono for Powerline:pixelsize=26:antialias=true",
 lowerOnStart = True,
-additionalFonts = ["xft:FontAwesome:pixelsize=23:antialias=true"],
+additionalFonts = ["xft:FontAwesome:pixelsize=25:antialias=true"],
 bgColor = "#282828",
 alpha = 200,
 position = TopW L 100,
 commands = [
     Run Wireless "wlp3s0" ["-t", "<fc=#fc9113><fn=1> </fn><essid></fc>"] 60,
     Run Cpu ["-t", "<fc=#f4663c><fn=1> </fn><total>%</fc>", "-L", "40", "-H", "60"] 10,
-    Run CoreTemp ["-t", "<fc=#fabd2f><core0>C°</fc>"] 20,
+    Run CoreTemp ["-t", "<fc=#fabd2f><fn=1> </fn><core0>C°</fc>"] 20,
     Run Memory ["-t", "<fc=#84c9f0><fn=1> </fn><usedratio>%</fc>"] 10,
     Run DiskU [("/", "<fc=#1cecc0><fn=1> </fn><free></fc>")] ["-t", "Disk"] 30,
     Run DiskIO [("sda4", "<read>b/s <write>b/s")] [] 10,
@@ -18,5 +18,5 @@ commands = [
     Run Com "/bin/bash" ["/home/namo/scripts/vol.sh"] "vol" 10,
     Run Com "/bin/bash" ["/home/namo/scripts/vollogo.sh"] "vollogo" 10],
 alignSep = "}{",
-template = "%StdinReader% }{ <fn=1>%vollogo%</fn> %vol%  %disku%  %diskio%  %coretemp%  %cpu%  %memory%  %date% |             "
+template = "%StdinReader% }{ <fn=1>%vollogo%</fn> %vol%  %disku%  %diskio%  %coretemp%  %cpu%  %memory%  %date% |            "
 }

@@ -1,6 +1,7 @@
 " ========= VUNDLE CONFIG ===========
 set nocompatible
 set nofoldenable
+set showcmd
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -12,6 +13,7 @@ Plugin 'tpope/vim-sensible'
 Plugin 'scrooloose/syntastic'
 Plugin 'dag/vim2hs'
 Plugin 'morhetz/gruvbox'
+Plugin 'bling/vim-bufferline'
 let g:syntastic_always_populate_loc_list=1
 " A Haskell plugin we'll install later is 'dag/vim2hs',
 " but installing it now is fine, too.
@@ -21,6 +23,9 @@ filetype plugin indent on
 
 colorscheme gruvbox
 " ========== GENERAL VIM SETTINGS ==========
+map gn :bn<cr>
+map gp :bp<cr>
+map gd :bd<cr>
 " dark mode for gruvbox
 set background=dark
 " Enable search highlighting

@@ -48,18 +48,20 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
  unset f
 fi
 
-
-xss-lock -- i3lock -n -c 000000 &
+#DONT FORGET TO PUT AMPERSAND (&)!!!!!!!!!!!
+xss-lock -- i3lock -n -i ~/Pictures/cube.png &
 setxkbmap -layout us,th -option grp:lctrl_lshift_toggle
 xxkb &
 megasync &
-#redshift-gtk
+nm-applet &
 xbindkeys
-xset s 1800 1800
-xset dpms 1810 1810 1810
+xset s 3600 3600
+xset dpms 3610 3610 3610
+udiskie -t &
 compton --config ~/.compton.conf -b
 feh --bg-scale ~/Pictures/peak.jpg &
 stalonetray &
+imwheel
 
 #choosing between different wms
 session=${1:-xmonad}
