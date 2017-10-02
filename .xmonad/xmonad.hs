@@ -37,6 +37,7 @@ import XMonad.Layout.Groups.Examples
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
+import XMonad.Layout.TrackFloating
 
 main = do 
     xmonad =<< statusBar "xmobar" myPP toggleStrutsKey (withNavigation2DConfig def $ dynamicProjects projects $ fullscreenSupport $ myConfig)
@@ -59,11 +60,12 @@ myTerminal = "terminator"
 altMask = mod1Mask
 addTopBar = noFrillsDeco shrinkText topBarTheme
 
-myLayoutHook = onWorkspace "misc" miscLayout 
-             $ onWorkspace "docs" docsLayout 
-             $ onWorkspace "hw" hwLayout
-             $ onWorkspace "free" Full
-             $ mainLayout 
+myLayoutHook =
+    onWorkspace "misc" miscLayout 
+    $ onWorkspace "docs" docsLayout 
+    $ onWorkspace "hw" hwLayout
+    $ onWorkspace "free" (trackFloating (Full ||| Tall 1 0.3 0.5))
+    $ (trackFloating mainLayout)
 
 myScratchpads = 
     [ NS "terminal" (myTerminal ++ " --role=scratchpad") (stringProperty "WM_WINDOW_ROLE" =? "scratchpad") doCenterFloat
@@ -71,18 +73,19 @@ myScratchpads =
     --, NS "notes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") doCenterFloat
     ]
 
-
+--subLayout has problem with trackFLoating?
 
 tiledTabs = tallTabs def {hNMaster = 2}
 mainLayout = 
     mkToggle (single FULL)
     $ windowNavigation
     $ addTopBar
+    $ trackFloating
     $ addTabs shrinkText myTabTheme 
     $ subLayout [] (Simplest) 
     $ spacingWithEdge 13
     $ hiddenWindows
-    $ ResizableTall 1 (3/100) (56/100) [] ||| Full
+    $ (ResizableTall 1 (3/100) (56/100) [] ||| Full)
 
 octaveLayout = 
     mkToggle (single FULL)
@@ -268,8 +271,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
 --            , ((modm .|. controlMask, xK_v), namedScratchpadAction myScratchpads "notes")
 
             --moving floating windows
-            , ((modm,               xK_Down     ), withFocused (keysResizeWindow (-10,-10) (1,1)))
-            , ((modm,               xK_Up     ), withFocused (keysResizeWindow (10,10) (1,1)))
+            , ((modm,               xK_Down     ), withFocused (keysResizeWindow (-5,-5) (1,1)))
+            , ((modm,               xK_Up     ), withFocused (keysResizeWindow (5,5) (1,1)))
             ]
 
 myPrompt = def

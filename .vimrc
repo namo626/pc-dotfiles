@@ -14,6 +14,7 @@ Plugin 'scrooloose/syntastic'
 Plugin 'dag/vim2hs'
 Plugin 'morhetz/gruvbox'
 Plugin 'bling/vim-bufferline'
+Plugin 'scrooloose/nerdtree'
 let g:syntastic_always_populate_loc_list=1
 " A Haskell plugin we'll install later is 'dag/vim2hs',
 " but installing it now is fine, too.
