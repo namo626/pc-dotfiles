@@ -27,6 +27,7 @@ colorscheme gruvbox
 map gn :bn<cr>
 map gp :bp<cr>
 map gd :bd<cr>
+cmap w!! w !sudo tee > /dev/null %
 " dark mode for gruvbox
 set background=dark
 " Enable search highlighting

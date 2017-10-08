@@ -42,9 +42,12 @@ import XMonad.Layout.TrackFloating
 main = do 
     xmonad =<< statusBar "xmobar" myPP toggleStrutsKey (withNavigation2DConfig def $ dynamicProjects projects $ fullscreenSupport $ myConfig)
 
+myPP = namedScratchpadFilterOutWorkspacePP 
+     $ xmobarPP { ppOrder = \(ws:l:t:_) -> [ws, t]
+                , ppCurrent = xmobarColor "yellow" "" . wrap "" ""}
 
 myConfig = def {
-      manageHook = insertPosition Below Newer <+> fullscreenManageHook <+> myManageHook <+> manageDocks <+> manageHook def
+      manageHook = fullscreenManageHook <+> myManageHook <+> {-insertPosition Below Newer <+>-}manageDocks <+> manageHook def
     , handleEventHook = handleEventHook def <+> docksEventHook <+> fullscreenEventHook
     , modMask = mod4Mask
     , borderWidth = 0
@@ -55,47 +58,61 @@ myConfig = def {
     --, focusFollowsMouse = False
     --, startupHook = spawn "stalonetray"
     } 
-
+myManageHook = (composeAll
+                [ name =? "Terminator Preferences" --> ((insertPosition Above Newer) <+> doCenterFloat)
+                , isDialog --> ((insertPosition Above Newer) <+> doCenterFloat)
+                , insertPosition Below Newer
+                , className =? "Thunar" --> doCenterFloat]) <+> namedScratchpadManageHook myScratchpads
+                where name = stringProperty "WM_NAME"
+ 
 myTerminal = "terminator"
 altMask = mod1Mask
 addTopBar = noFrillsDeco shrinkText topBarTheme
 
 myLayoutHook =
     onWorkspace "misc" miscLayout 
-    $ onWorkspace "docs" docsLayout 
-    $ onWorkspace "hw" hwLayout
-    $ onWorkspace "free" (trackFloating (Full ||| Tall 1 0.3 0.5))
-    $ (trackFloating mainLayout)
+    $ onWorkspace "web" webLayout
+    $ onWorkspaces ["conf", "matlab"] (trackFloating mainLayout)
+    otherLayout
+
 
 myScratchpads = 
-    [ NS "terminal" (myTerminal ++ " --role=scratchpad") (stringProperty "WM_WINDOW_ROLE" =? "scratchpad") doCenterFloat
+    [ NS "terminal" ("urxvt -name scratchpad") (resource=? "scratchpad") doCenterFloat
     , NS "slack" "slack" (stringProperty "WM_NAME" =? "Slack - Honors Physics II (Fall 2017)") doCenterFloat
+    , NS "ranger" ("urxvt -name ranger -e ranger") (resource =? "ranger") (customFloating $ W.RationalRect 0.05 0.05 0.4 0.4)
     --, NS "notes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") doCenterFloat
     ]
 
 --subLayout has problem with trackFLoating?
-
-tiledTabs = tallTabs def {hNMaster = 2}
-mainLayout = 
+mainModifier = 
     mkToggle (single FULL)
-    $ windowNavigation
-    $ addTopBar
-    $ trackFloating
-    $ addTabs shrinkText myTabTheme 
-    $ subLayout [] (Simplest) 
-    $ spacingWithEdge 13
-    $ hiddenWindows
-    $ (ResizableTall 1 (3/100) (56/100) [] ||| Full)
+    . windowNavigation
+    . addTopBar
+    . addTabs shrinkText myTabTheme 
+    . subLayout [] (Simplest) 
+    . spacingWithEdge 13
+    . hiddenWindows
 
-octaveLayout = 
+webModifier = 
     mkToggle (single FULL)
-    $ windowNavigation   
-    $ addTopBar
-    $ addTabs shrinkText myTabTheme 
-    $ subLayout [] (Simplest) 
-    $ spacingWithEdge 13
-    $ hiddenWindows
-    $ ResizableTall 1 (3/100) (50/100) [] ||| Full ||| GridRatio (3/3) ||| Grid
+    . windowNavigation
+    . addTopBar
+    . spacingWithEdge 13
+    . trackFloating 
+
+mainLayout = mainModifier (ResizableTall 1 (3/100) (56/100) [] ||| Full)
+otherLayout = mainModifier (ResizableTall 1 (3/100) (50/100) [] ||| Full)
+webLayout = webModifier (Full ||| Tall 1 (3/100) (50/100))
+
+--mainLayout = 
+--    mkToggle (single FULL)
+--    $ windowNavigation
+--    $ addTopBar
+--    $ addTabs shrinkText myTabTheme 
+--    $ subLayout [] (Simplest) 
+--    $ spacingWithEdge 13
+--    $ hiddenWindows
+--    $ (ResizableTall 1 (3/100) (56/100) [] ||| Full)
 
 miscLayout = 
     mkToggle (single FULL)
@@ -106,38 +123,19 @@ miscLayout =
     $ spacingWithEdge 9 
     $ Circle ||| Full
 
-docsLayout = 
-    mkToggle (single FULL) 
-    $ windowNavigation
-    $ addTopBar
-    $ addTabs shrinkText myTabTheme 
-    $ subLayout [] (Simplest) 
-    $ spacingWithEdge 15
-    $ ResizableTall 1 (3/100) (40/100) [] ||| Full
-
-hwLayout = 
-    mkToggle (single FULL)
-    $ windowNavigation
-    $ addTopBar
-    $ addTabs shrinkText myTabTheme 
-    $ subLayout [] (Simplest) 
-    $ spacingWithEdge 9 
-    $ ResizableTall 1 (3/100) (50/100) [] ||| Full
-
-myPP = xmobarPP {ppOrder = \(ws:l:t:_) -> [ws, t]}
 toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
 myWorkspaces :: Forest String
 myWorkspaces = 
-    [ Node "conf" []
-    , Node "term" []
+    [ Node "\xf085" []
+    , Node "\xf120" []
     --, Node "prgm" []
-    , Node "hw" []
-    , Node "docs" []
-    , Node "matlab" []
-    , Node "misc" []
-    , Node "game" []
-    , Node "web" []
+    --, Node "hw" []
+    , Node "\xf0f6" []
+    --, Node "matlab" []
+    --, Node "misc" []
+    --, Node "game" []
+    --, Node "web" []
     ]
 
 projects :: [Project]
@@ -147,40 +145,37 @@ projects =
               , projectStartHook = Just $ do runInTerm "" "htop"
               }
 
-    , Project { projectName = "term"
+    , Project { projectName = "\xf120"
               , projectDirectory = "~/"
               , projectStartHook = Just $ do spawn "terminator"
-                                             spawn "terminator"
-                                             spawn "terminator"
               }
 
-    , Project { projectName = "conf"
+    , Project { projectName = "\xf085"
               , projectDirectory = "~/"
               , projectStartHook = Just $ do spawn "firefox"
                                              spawn "terminator"
-                                             spawn "terminator"
               }
 
-    , Project { projectName = "prgm"
-              , projectDirectory = "~/MEGA"
-              , projectStartHook = Just $ do spawn "terminator"
-                                             spawn "terminator"
-                                             spawn "terminator"
+   -- , Project { projectName = "prgm"
+   --           , projectDirectory = "~/MEGA"
+   --           , projectStartHook = Just $ do spawn "terminator"
+   --                                          spawn "terminator"
+   --                                          spawn "terminator"
 
-              }
+   --           }
 
-    , Project { projectName = "docs"
+    , Project { projectName = "\xf0f6"
               , projectDirectory = "~/MEGA"
               , projectStartHook = Just $ do spawn "okular"
 
               }
 
-    , Project { projectName = "hw"
-              , projectDirectory = "~/MEGA"
-              , projectStartHook = Just $ do spawn "firefox"
-                                             runInTerm "" "ranger"
+   -- , Project { projectName = "hw"
+   --           , projectDirectory = "~/MEGA"
+   --           , projectStartHook = Just $ do spawn "firefox"
+   --                                          runInTerm "" "ranger"
 
-              }
+   --           }
     
     , Project { projectName = "web"
               , projectDirectory = "~/"
@@ -192,12 +187,12 @@ projects =
                                           
 myTabTheme = def { fontName = "xft:xos4 Terminus:style=bold:size=13"
                  , decoHeight = 32
-                 , activeTextColor = "#fbf1c7"
+                 , activeTextColor = "#ffffff" --"#fbf1c7"
                  , inactiveTextColor = "#ebdbb2"
                  , inactiveColor = "#504945"
                  , inactiveBorderColor = "#504945"
-                 , activeColor = "#665c54"
-                 , activeBorderColor = "#665c54"
+                 , activeColor = blue --"#665c54"
+                 , activeBorderColor = blue --"#665c54"
                  }
 
 topBarTheme = def
@@ -213,11 +208,15 @@ topBarTheme = def
     }
 
 
-myManageHook = (composeAll
-                [ name =? "Terminator Preferences" --> doCenterFloat
-                , className =? "Thunar" --> doCenterFloat]) <+> namedScratchpadManageHook myScratchpads
-                where name = stringProperty "WM_NAME"
-         
+--keybindings        
+
+--keys to overwrite
+--newKeys x = foldr M.delete (keys def x) (keysToRemove x)
+--keysToRemove :: XConfig Layout -> [(KeyMask, KeySym)]
+--keysToRemove x = M.fromList 
+--    [ (modMask, xk_Tab)
+--    ]
+
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             [ ((modm .|. controlMask, xK_h), sendMessage $ pullGroup L)
             , ((modm .|. controlMask, xK_l), sendMessage $ pullGroup R)
@@ -255,11 +254,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((altMask, xK_k), windowGo U True)
             , ((altMask, xK_h), windowGo L True)
             , ((altMask, xK_l), windowGo R True)
+            , ((altMask, xK_Tab), windows W.focusDown)
 
             --easy switching of workspaces
             , ((altMask, xK_Left), prevWS)
             , ((altMask, xK_Right), nextWS)
-            , ((altMask, xK_Tab), cycleRecentWS [xK_Alt_L] xK_Tab xK_grave)
+            --, ((altMask, xK_Tab), cycleRecentWS [xK_Alt_L] xK_Tab xK_grave)
+            , ((modm, xK_Tab), toggleWS' ["NSP"])
 
             --hiding windows
             , ((modm, xK_backslash), withFocused hideWindow)
@@ -268,11 +269,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             --scratchpads
             , ((modm .|. controlMask, xK_n), namedScratchpadAction myScratchpads "terminal")
             , ((modm .|. controlMask, xK_b), namedScratchpadAction myScratchpads "slack")
+            , ((modm .|. controlMask, xK_r), namedScratchpadAction myScratchpads "ranger")
 --            , ((modm .|. controlMask, xK_v), namedScratchpadAction myScratchpads "notes")
 
             --moving floating windows
-            , ((modm,               xK_Down     ), withFocused (keysResizeWindow (-5,-5) (1,1)))
-            , ((modm,               xK_Up     ), withFocused (keysResizeWindow (5,5) (1,1)))
+            --, ((modm,               xK_Down     ), withFocused (keysResizeWindow (-5,-5) (1,1)))
+            --, ((modm,               xK_Up     ), withFocused (keysResizeWindow (5,5) (1,1)))
             ]
 
 myPrompt = def

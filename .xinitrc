@@ -53,13 +53,14 @@ xss-lock -- i3lock -n -i ~/Pictures/cube.png &
 setxkbmap -layout us,th -option grp:lctrl_lshift_toggle
 xxkb &
 megasync &
+dropbox &
 nm-applet &
 xbindkeys
 xset s 3600 3600
 xset dpms 3610 3610 3610
 udiskie -t &
 compton --config ~/.compton.conf -b
-feh --bg-scale ~/Pictures/peak.jpg &
+feh --bg-scale ~/Pictures/cube.png &
 stalonetray &
 imwheel
 
