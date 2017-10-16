@@ -14,6 +14,7 @@ Plugin 'scrooloose/syntastic'
 Plugin 'dag/vim2hs'
 Plugin 'morhetz/gruvbox'
 Plugin 'bling/vim-bufferline'
+Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 let g:syntastic_always_populate_loc_list=1
 " A Haskell plugin we'll install later is 'dag/vim2hs',
@@ -24,9 +25,13 @@ filetype plugin indent on
 
 colorscheme gruvbox
 " ========== GENERAL VIM SETTINGS ==========
+let g:ctrlp_show_hidden = 1
+
 map gn :bn<cr>
 map gp :bp<cr>
 map gd :bd<cr>
+set path+=**
+set wildmenu
 cmap w!! w !sudo tee > /dev/null %
 " dark mode for gruvbox
 set background=dark

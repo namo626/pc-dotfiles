@@ -37,5 +37,5 @@ POWERLINE_BASH_SELECT=1
 #source ~/.bash-powerline.sh
 
 #exports
-export QT_SCALE_FACTOR=1.7
-
+export QT_SCALE_FACTOR=1
+#export MATLAB_JAVA=/usr/lib/jvm/java-7-openjdk/jre

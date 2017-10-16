@@ -1,5 +1,8 @@
 import XMonad
 import XMonad.Layout.Hidden
+import XMonad.Layout.LimitWindows
+import XMonad.Layout.BinarySpacePartition
+import XMonad.Layout.Accordion
 import XMonad.Actions.FloatKeys
 import XMonad.Actions.DynamicWorkspaces (removeWorkspace)
 import XMonad.Actions.CycleWS
@@ -16,7 +19,7 @@ import XMonad.Layout.Tabbed
 import XMonad.Layout  
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.WindowNavigation
-import XMonad.Layout.BoringWindows
+import qualified XMonad.Layout.BoringWindows as B
 import XMonad.Layout.Simplest
 import XMonad.Layout.Circle
 import XMonad.Layout.NoFrillsDecoration
@@ -44,7 +47,8 @@ main = do
 
 myPP = namedScratchpadFilterOutWorkspacePP 
      $ xmobarPP { ppOrder = \(ws:l:t:_) -> [ws, t]
-                , ppCurrent = xmobarColor "yellow" "" . wrap "" ""}
+                , ppCurrent = xmobarColor "yellow" "green" . wrap "" ""
+                , ppTitle = xmobarColor "green" "" . shorten 30}
 
 myConfig = def {
       manageHook = fullscreenManageHook <+> myManageHook <+> {-insertPosition Below Newer <+>-}manageDocks <+> manageHook def
@@ -58,12 +62,19 @@ myConfig = def {
     --, focusFollowsMouse = False
     --, startupHook = spawn "stalonetray"
     } 
-myManageHook = (composeAll
-                [ name =? "Terminator Preferences" --> ((insertPosition Above Newer) <+> doCenterFloat)
-                , isDialog --> ((insertPosition Above Newer) <+> doCenterFloat)
-                , insertPosition Below Newer
-                , className =? "Thunar" --> doCenterFloat]) <+> namedScratchpadManageHook myScratchpads
+myManageHook = (composeOne
+                [ name =? "Terminator Preferences" -?> ((insertPosition Above Newer) <+> doCenterFloat)
+                , isDialog -?> ((insertPosition Above Newer) <+> doCenterFloat)
+                , className =? "Eog" -?> (insertPosition Below Older)
+                , className =? "MATLAB R2017b - academic use" -?> (insertPosition Below Older)
+                , className =? "feh" -?> (insertPosition Below Older)
+                , className =? "okular" -?> (insertPosition Below Older)
+                , className =? "Mirage" -?> (insertPosition Below Older)
+                , className =? "Thunar" -?> doCenterFloat 
+                , (return True) -?> (insertPosition Below Newer)])
+                <+> namedScratchpadManageHook myScratchpads
                 where name = stringProperty "WM_NAME"
+                      
  
 myTerminal = "terminator"
 altMask = mod1Mask
@@ -72,6 +83,7 @@ addTopBar = noFrillsDeco shrinkText topBarTheme
 myLayoutHook =
     onWorkspace "misc" miscLayout 
     $ onWorkspace "web" webLayout
+    $ onWorkspace "media" mediaLayout
     $ onWorkspaces ["conf", "matlab"] (trackFloating mainLayout)
     otherLayout
 
@@ -89,7 +101,7 @@ mainModifier =
     . windowNavigation
     . addTopBar
     . addTabs shrinkText myTabTheme 
-    . subLayout [] (Simplest) 
+    . subLayout [] (Simplest ||| Full)
     . spacingWithEdge 13
     . hiddenWindows
 
@@ -103,35 +115,33 @@ webModifier =
 mainLayout = mainModifier (ResizableTall 1 (3/100) (56/100) [] ||| Full)
 otherLayout = mainModifier (ResizableTall 1 (3/100) (50/100) [] ||| Full)
 webLayout = webModifier (Full ||| Tall 1 (3/100) (50/100))
-
---mainLayout = 
---    mkToggle (single FULL)
---    $ windowNavigation
---    $ addTopBar
---    $ addTabs shrinkText myTabTheme 
---    $ subLayout [] (Simplest) 
---    $ spacingWithEdge 13
---    $ hiddenWindows
---    $ (ResizableTall 1 (3/100) (56/100) [] ||| Full)
+mediaLayout = 
+    mkToggle (single FULL)
+    . windowNavigation
+    . addTopBar
+    . spacingWithEdge 13
+    . trackFloating 
+    $ (GridRatio (3/3) ||| Full)
 
 miscLayout = 
     mkToggle (single FULL)
-    $ windowNavigation
-    $ addTopBar
-    $ addTabs shrinkText myTabTheme 
-    $ subLayout [] (Simplest) 
-    $ spacingWithEdge 9 
-    $ Circle ||| Full
+    . windowNavigation
+    . addTopBar
+    . spacingWithEdge 13
+    . trackFloating 
+    $ (Grid ||| Full ||| Circle)
+
+
 
 toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
 myWorkspaces :: Forest String
 myWorkspaces = 
-    [ Node "\xf085" []
-    , Node "\xf120" []
+    [ Node "conf" []
+    , Node "term" []
     --, Node "prgm" []
     --, Node "hw" []
-    , Node "\xf0f6" []
+    , Node "docs" []
     --, Node "matlab" []
     --, Node "misc" []
     --, Node "game" []
@@ -257,8 +267,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((altMask, xK_Tab), windows W.focusDown)
 
             --easy switching of workspaces
-            , ((altMask, xK_Left), prevWS)
-            , ((altMask, xK_Right), nextWS)
+            , ((modm, xK_Left), prevWS)
+            , ((modm, xK_Right), nextWS)
             --, ((altMask, xK_Tab), cycleRecentWS [xK_Alt_L] xK_Tab xK_grave)
             , ((modm, xK_Tab), toggleWS' ["NSP"])
 
@@ -275,6 +285,22 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             --moving floating windows
             --, ((modm,               xK_Down     ), withFocused (keysResizeWindow (-5,-5) (1,1)))
             --, ((modm,               xK_Up     ), withFocused (keysResizeWindow (5,5) (1,1)))
+
+            -- sublayouts
+            , ((modm .|. altMask, xK_space), toSubl NextLayout)
+            , ((modm .|. altMask, xK_j), windows W.swapDown)
+            , ((modm .|. altMask, xK_k), windows W.swapUp)
+            , ((modm .|. altMask, xK_comma), toSubl (IncMasterN 1))
+            , ((modm .|. altMask, xK_period), toSubl (IncMasterN (-1)))
+            , ((modm, xK_r), toSubl Rotate)
+            --, ((modm, xK_k), B.focusUp)
+            --, ((modm, xK_j), B.focusDown)
+            , ((modm .|. altMask, xK_i), setLimit 3)
+
+            --mpd binding (mpc)
+            , ((modm .|. altMask, xK_p), spawn "mpc pause")
+            , ((modm .|. altMask, xK_o), spawn "mpc play")
+            , ((modm .|. altMask, xK_i), spawn "mpc next")
             ]
 
 myPrompt = def

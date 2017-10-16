@@ -49,6 +49,7 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 #DONT FORGET TO PUT AMPERSAND (&)!!!!!!!!!!!
+wmname LG3D
 xss-lock -- i3lock -n -i ~/Pictures/cube.png &
 setxkbmap -layout us,th -option grp:lctrl_lshift_toggle
 xxkb &

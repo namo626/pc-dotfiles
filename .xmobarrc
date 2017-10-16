@@ -1,5 +1,5 @@
 Config {
-font = "xft:Droid Sans Mono for Powerline:pixelsize=26:antialias=true,FontAwesome:size=14",
+font = "xft:Droid Sans Mono for Powerline:pixelsize=26:antialias=true,FontAwesome:size=14,Garuda:pixelsize=23",
 lowerOnStart = True,
 additionalFonts = ["xft:FontAwesome:pixelsize=25:antialias=true"],
 bgColor = "#282828",
@@ -17,6 +17,7 @@ commands = [
     Run StdinReader,
     Run Com "/bin/bash" ["/home/namo/scripts/vol.sh"] "vol" 10,
     Run Com "/bin/bash" ["/home/namo/scripts/vollogo.sh"] "vollogo" 10],
+    Run Com "/bin/bash" ["/home/namo/scripts/mpd.sh"] "mpc" 5],
+    Run Com "/bin/bash" ["/home/namo/scripts/mpclogo.sh"] "mpl" 5],
 alignSep = "}{",
-template = "%StdinReader% }{ <fn=1>%vollogo%</fn> %vol%  %disku%  %diskio%  %coretemp%  %cpu%  %memory%  %date% |               "
-}
+template = "%StdinReader% }{ <fc=#fbf1c7>%mpc%</fc>  |  <fn=1>%vollogo%</fn> %vol%  %disku%  %diskio%  %coretemp%  %cpu%  %memory%  %date% |               "
