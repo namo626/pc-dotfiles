@@ -1,5 +1,7 @@
 *
+!.config/
 .config/*
+!.config/ranger/
 
 # Exceptions
 !.gitignore
@@ -14,6 +16,5 @@
 !.xbindkeysrc
 !.imwheelrc
 !.bashrc
-!.config/ranger/
 !.compton.conf
 !scripts/
