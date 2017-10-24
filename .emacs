@@ -39,10 +39,10 @@
 (evil-mode 1)
 
 ;;increase LaTeX size
-(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.3))
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
 
 ;;diary location
-(setq diary-file "~/MEGA/diary")
+(setq diary-file "~/Dropbox/diary")
 
 ;;fancy display
 (setq view-diary-entries-initially t
@@ -52,4 +52,6 @@
 (add-hook 'today-visible-calendar-hook 'calendar-mark-today)
 
 (setq org-agenda-include-diary t)
-(setq calendar-mark-diary-entries-flag t)
+;(setq calendar-mark-diary-entries-flag t)
+
+(diary)

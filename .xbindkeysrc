@@ -17,3 +17,6 @@
 #"rofi -show run -font \"Droid Sans Mono for Powerline 20\""
 "rofi -show run"
    Mod4 + x
+
+"copyq menu"
+   Mod2 + F2
