@@ -1,0 +1,18 @@
+*
+.config/*
+
+# Exceptions
+!.gitignore
+!.emacs
+!.xmonad/
+!.xmobarrc
+!.stalonetrayrc
+!.vimrc
+!.xinitrc
+!.Xresources
+!.Xauthority
+!.xbindkeysrc
+!.imwheelrc
+!.bashrc
+!.config/ranger/
+!.compton.conf
