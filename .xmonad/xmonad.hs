@@ -1,5 +1,6 @@
 import XMonad
 import XMonad.Layout.Hidden
+import XMonad.Layout.DragPane
 import XMonad.Layout.LimitWindows
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.Accordion
@@ -84,6 +85,7 @@ myLayoutHook =
     onWorkspace "misc" miscLayout 
     $ onWorkspace "web" webLayout
     $ onWorkspace "media" mediaLayout
+    $ onWorkspace "docs" docsLayout
     $ onWorkspaces ["conf", "matlab"] (trackFloating mainLayout)
     otherLayout
 
@@ -92,7 +94,7 @@ myScratchpads =
     [ NS "terminal" ("urxvt -name scratchpad") (resource=? "scratchpad") doCenterFloat
     , NS "slack" "slack" (stringProperty "WM_NAME" =? "Slack - Honors Physics II (Fall 2017)") doCenterFloat
     , NS "ranger" ("urxvt -name ranger -e ranger") (resource =? "ranger") (customFloating $ W.RationalRect 0.05 0.05 0.4 0.4)
-    --, NS "notes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") doCenterFloat
+    , NS "notes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") nonFloating
     ]
 
 --subLayout has problem with trackFLoating?
@@ -101,7 +103,7 @@ mainModifier =
     . windowNavigation
     . addTopBar
     . addTabs shrinkText myTabTheme 
-    . subLayout [] (Simplest ||| Full)
+    . subLayout [] (Simplest ||| Full ||| dragPane Horizontal 0.5 0.5)
     . spacingWithEdge 13
     . hiddenWindows
 
@@ -115,6 +117,13 @@ webModifier =
 mainLayout = mainModifier (ResizableTall 1 (3/100) (56/100) [] ||| Full)
 otherLayout = mainModifier (ResizableTall 1 (3/100) (50/100) [] ||| Full)
 webLayout = webModifier (Full ||| Tall 1 (3/100) (50/100))
+docsLayout = 
+    mkToggle (single FULL)
+    . windowNavigation
+    . addTopBar
+    . spacingWithEdge 13
+    . trackFloating 
+    $ (Tall 1 (3/100) (1/2)) ||| Full
 mediaLayout = 
     mkToggle (single FULL)
     . windowNavigation
@@ -241,8 +250,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             --, ((altMask, xK_k), sendMessage $ Go U)
             --, ((altMask, xK_h), sendMessage $ Go L)
             --, ((altMask, xK_l), sendMessage $ Go R)
+            --Dynamic projects
             , ((modm, xK_s), switchProjectPrompt myPrompt)
             , ((modm, xK_slash), shiftToProjectPrompt myPrompt)
+            , ((modm, xK_w), renameProjectPrompt myPrompt)
             , ((modm, xK_z), sendMessage MirrorExpand)
             , ((modm, xK_a), sendMessage MirrorShrink)
             , ((modm, xK_g), sequence_ $ [sendMessage $ IncMasterN 1, sendMessage $ pullGroup D, sendMessage $ IncMasterN (-1)])
@@ -252,19 +263,20 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm, xK_n), moveToNewGroupUp)
             , ((modm, xK_p), splitGroup)
             , ((modm, xK_grave), sequence_ $ [sendMessage ToggleStruts, sendMessage $ Toggle FULL])
-            , ((modm .|. shiftMask, xK_Tab), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup L]) 
-            , ((controlMask .|. shiftMask, xK_Tab), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup D]) 
+ --           , ((modm .|. shiftMask, xK_Tab), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup L]) 
+ --           , ((controlMask .|. shiftMask, xK_Tab), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup D]) 
 
-            --easy swapping of windows
-            , ((modm .|. shiftMask, xK_h), windowSwap L True)
-            , ((modm .|. shiftMask, xK_l), windowSwap R True)
-            , ((modm .|. shiftMask, xK_k), windowSwap U True)
-            , ((modm .|. shiftMask, xK_j), windowSwap D True)
+            --easy navigation and swapping of windows
+            , ((modm .|. shiftMask, xK_h), windowSwap L False)
+            , ((modm .|. shiftMask, xK_l), windowSwap R False)
+            , ((modm .|. shiftMask, xK_k), windows W.swapUp)
+            , ((modm .|. shiftMask, xK_j), windows W.swapDown)
             , ((altMask, xK_j), windowGo D True)
             , ((altMask, xK_k), windowGo U True)
             , ((altMask, xK_h), windowGo L True)
             , ((altMask, xK_l), windowGo R True)
             , ((altMask, xK_Tab), windows W.focusDown)
+            , ((altMask, xK_q), windows W.focusUp)
 
             --easy switching of workspaces
             , ((modm, xK_Left), prevWS)
@@ -280,7 +292,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm .|. controlMask, xK_n), namedScratchpadAction myScratchpads "terminal")
             , ((modm .|. controlMask, xK_b), namedScratchpadAction myScratchpads "slack")
             , ((modm .|. controlMask, xK_r), namedScratchpadAction myScratchpads "ranger")
---            , ((modm .|. controlMask, xK_v), namedScratchpadAction myScratchpads "notes")
+            , ((modm .|. controlMask, xK_v), namedScratchpadAction myScratchpads "notes")
 
             --moving floating windows
             --, ((modm,               xK_Down     ), withFocused (keysResizeWindow (-5,-5) (1,1)))

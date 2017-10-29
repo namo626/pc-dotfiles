@@ -39,3 +39,6 @@ POWERLINE_BASH_SELECT=1
 #exports
 export QT_SCALE_FACTOR=1
 #export MATLAB_JAVA=/usr/lib/jvm/java-7-openjdk/jre
+
+#ntfs folder color
+eval $(dircolors -b ~/.dircolors)

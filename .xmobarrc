@@ -15,8 +15,9 @@ commands = [
     Run BatteryP ["BAT0"] ["-t", "<fc=#fabd2f><acstatus>(<left>%)</fc>", "--", "-O", "<fn=1> </fn>", "-o", "<fn=1> </fn>"] 10,
     Run Date "<fc=#cae91e><fn=1> </fn>%a %_d %b %Y</fc> | <fc=#edf6f4><fn=1> </fn>%-I:%M %p</fc>" "date" 10,
     Run MPD ["-t", "<statei> <file>","--", "-P", "<fn=1> </fn>", "-Z", "<fn=1>  </fn>" ,"-S", ""] 3,
+    Run Kbd [("us", "US"), ("th", "TH")],
     Run StdinReader,
     Run Com "/bin/bash" ["/home/namo/scripts/vol.sh"] "vol" 10,
     Run Com "/bin/bash" ["/home/namo/scripts/vollogo.sh"] "vollogo" 10],
 alignSep = "}{",
-template = "%StdinReader% }{ %mpd%        <fn=1>%vollogo%</fn> %vol%  %disku%  %diskio%  %coretemp%  %cpu%  %memory%  %date% |               "
+template = "%StdinReader% }{ %mpd%        <fn=1>%vollogo%</fn> %vol%  %disku%  %diskio%  %coretemp%  %cpu%  %memory%  %date% | %kbd%                   "
