@@ -235,6 +235,7 @@ topBarTheme = def
 --keysToRemove x = M.fromList 
 --    [ (modMask, xk_Tab)
 --    ]
+--    testing
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             [ ((modm .|. controlMask, xK_h), sendMessage $ pullGroup L)
@@ -244,6 +245,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm, xK_d), spawn "rofi -show run -font \"Droid Sans Mono for Powerline 20\"")
             , ((modm .|. altMask, xK_l), spawn "i3lock -c 000000") 
             , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
+            , ((modm .|. controlMask, xK_comma), sequence_ $ [withFocused (sendMessage . MergeAll), windows W.focusMaster, withFocused (sendMessage . UnMerge), windowGo R False])
             , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
             , ((modm .|. controlMask, xK_i), withFocused (sendMessage . UnMergeAll))
             --, ((altMask, xK_j), sendMessage $ Go D)
@@ -271,10 +273,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm .|. shiftMask, xK_l), windowSwap R False)
             , ((modm .|. shiftMask, xK_k), windows W.swapUp)
             , ((modm .|. shiftMask, xK_j), windows W.swapDown)
-            , ((altMask, xK_j), windowGo D True)
-            , ((altMask, xK_k), windowGo U True)
-            , ((altMask, xK_h), windowGo L True)
-            , ((altMask, xK_l), windowGo R True)
+            , ((altMask, xK_j), windowGo D False)
+            , ((altMask, xK_k), windowGo U False)
+            , ((altMask, xK_h), windowGo L False)
+            , ((altMask, xK_l), windowGo R False)
             , ((altMask, xK_Tab), windows W.focusDown)
             , ((altMask, xK_q), windows W.focusUp)
 
