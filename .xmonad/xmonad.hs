@@ -1,6 +1,8 @@
 import XMonad
 import XMonad.Layout.Hidden
 import XMonad.Layout.DragPane
+import XMonad.Layout.TwoPane
+import XMonad.Actions.RotSlaves
 import XMonad.Layout.LimitWindows
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.Accordion
@@ -95,6 +97,7 @@ myScratchpads =
     , NS "slack" "slack" (stringProperty "WM_NAME" =? "Slack - Honors Physics II (Fall 2017)") doCenterFloat
     , NS "ranger" ("urxvt -name ranger -e ranger") (resource =? "ranger") (customFloating $ W.RationalRect 0.05 0.05 0.4 0.4)
     , NS "notes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") nonFloating
+    , NS "floatnotes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") doCenterFloat
     ]
 
 --subLayout has problem with trackFLoating?
@@ -123,7 +126,7 @@ docsLayout =
     . addTopBar
     . spacingWithEdge 13
     . trackFloating 
-    $ (Tall 1 (3/100) (1/2)) ||| Full
+    $ TwoPane (3/100) (1/2) ||| Full ||| (Tall 1 (3/100) (1/2))
 mediaLayout = 
     mkToggle (single FULL)
     . windowNavigation
@@ -295,6 +298,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm .|. controlMask, xK_b), namedScratchpadAction myScratchpads "slack")
             , ((modm .|. controlMask, xK_r), namedScratchpadAction myScratchpads "ranger")
             , ((modm .|. controlMask, xK_v), namedScratchpadAction myScratchpads "notes")
+            , ((modm .|. controlMask, xK_Return), namedScratchpadAction myScratchpads "floatnotes")
 
             --moving floating windows
             --, ((modm,               xK_Down     ), withFocused (keysResizeWindow (-5,-5) (1,1)))
@@ -315,6 +319,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm .|. altMask, xK_p), spawn "mpc pause")
             , ((modm .|. altMask, xK_o), spawn "mpc play")
             , ((modm .|. altMask, xK_i), spawn "mpc next")
+
+            --twopane + rotslaves
+            , ((altMask .|. shiftMask, xK_k), rotSlavesUp)
+            , ((altMask .|. shiftMask, xK_j), rotSlavesDown)
             ]
 
 myPrompt = def

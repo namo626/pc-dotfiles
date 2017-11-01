@@ -16,6 +16,7 @@ Plugin 'morhetz/gruvbox'
 Plugin 'bling/vim-bufferline'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
+Plugin 'xuhdev/vim-latex-live-preview'
 let g:syntastic_always_populate_loc_list=1
 " A Haskell plugin we'll install later is 'dag/vim2hs',
 " but installing it now is fine, too.
@@ -24,6 +25,16 @@ call vundle#end()
 filetype plugin indent on
 
 colorscheme gruvbox
+
+" ==== Macros ====
+autocmd FileType tex inoremap ;fn \begin{frame}<Enter><Enter><Enter><Enter>\end{frame}<Esc>2ki<Tab><Tab>
+autocmd FileType tex inoremap ;ft \frametitle{}<Esc>i
+autocmd FileType tex inoremap ;md \[\]<Esc>hi
+autocmd FileType tex inoremap ;bd \begin{document}<Enter><Enter><Enter><Enter>\end{document}<Esc>2ki<Tab><Tab>
+autocmd FileType tex inoremap ;bi \begin{itemize}<Enter><Enter>\end{itemize}<Esc>ki<Tab><Tab>
+autocmd FileType tex inoremap ;it \item
+
+
 " ========== GENERAL VIM SETTINGS ==========
 let g:ctrlp_show_hidden = 1
 
