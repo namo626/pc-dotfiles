@@ -59,7 +59,7 @@ nm-applet &
 xbindkeys
 xset s 3600 3600
 xset dpms 3610 3610 3610
-udiskie -t &
+udisksvm -a &
 compton --config ~/.compton.conf -b
 feh --bg-scale ~/Pictures/cube.png &
 stalonetray &

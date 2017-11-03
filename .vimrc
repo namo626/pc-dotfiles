@@ -16,7 +16,8 @@ Plugin 'morhetz/gruvbox'
 Plugin 'bling/vim-bufferline'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
-Plugin 'xuhdev/vim-latex-live-preview'
+"Plugin 'xuhdev/vim-latex-live-preview'
+Plugin 'lervag/vimtex'
 let g:syntastic_always_populate_loc_list=1
 " A Haskell plugin we'll install later is 'dag/vim2hs',
 " but installing it now is fine, too.
@@ -27,16 +28,28 @@ filetype plugin indent on
 colorscheme gruvbox
 
 " ==== Macros ====
-autocmd FileType tex inoremap ;fn \begin{frame}<Enter><Enter><Enter><Enter>\end{frame}<Esc>2ki<Tab><Tab>
+autocmd FileType tex inoremap ;<Tab> <Esc>/<++><Enter>"_c4l
+autocmd FileType tex inoremap ;bf \begin{frame}<Enter><Enter>\end{frame}<Esc>1ki<Tab>
 autocmd FileType tex inoremap ;ft \frametitle{}<Esc>i
 autocmd FileType tex inoremap ;md \[\]<Esc>hi
-autocmd FileType tex inoremap ;bd \begin{document}<Enter><Enter><Enter><Enter>\end{document}<Esc>2ki<Tab><Tab>
+autocmd FileType tex inoremap ;bd \begin{document}<Enter><Enter>\end{document}<Esc>2ki
 autocmd FileType tex inoremap ;bi \begin{itemize}<Enter><Enter>\end{itemize}<Esc>ki<Tab><Tab>
 autocmd FileType tex inoremap ;it \item
+autocmd FileType tex inoremap ;ig \includegraphics[]{<++>}<Esc>F[a
+autocmd FileType tex inoremap ;bp \begin{picture}()(<++>)<Enter>\end{picture}<Esc>?(<Enter>na
 
 
 " ========== GENERAL VIM SETTINGS ==========
 let g:ctrlp_show_hidden = 1
+set wildchar=<Tab> wildmenu wildmode=full
+set wildcharm=<C-Z>
+"nnoremap <F10> :b <C-Z>
+nnoremap <F10> :ls<CR>:b<Space>
+set autowriteall
+
+set relativenumber
+filetype plugin on
+set omnifunc=syntaxcomplete#Complete
 
 map gn :bn<cr>
 map gp :bp<cr>

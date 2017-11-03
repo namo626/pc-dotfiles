@@ -239,6 +239,7 @@ topBarTheme = def
 --    [ (modMask, xk_Tab)
 --    ]
 --    testing
+function X<C-x>
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             [ ((modm .|. controlMask, xK_h), sendMessage $ pullGroup L)
