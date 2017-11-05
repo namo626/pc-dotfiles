@@ -7,7 +7,7 @@ import XMonad.Layout.LimitWindows
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.Accordion
 import XMonad.Actions.FloatKeys
-import XMonad.Actions.DynamicWorkspaces (removeWorkspace)
+import XMonad.Actions.DynamicWorkspaces 
 import XMonad.Actions.CycleWS
 import XMonad.Actions.CycleRecentWS
 import XMonad.Actions.Navigation2D
@@ -28,7 +28,7 @@ import XMonad.Layout.Circle
 import XMonad.Layout.NoFrillsDecoration
 import XMonad.Hooks.ManageHelpers
 import XMonad.ManageHook
-import XMonad.Actions.DynamicProjects
+--import XMonad.Actions.DynamicProjects
 import qualified Data.Map as M
 import Data.Tree
 import XMonad.Actions.TreeSelect
@@ -46,7 +46,7 @@ import XMonad.Layout.MultiToggle.Instances
 import XMonad.Layout.TrackFloating
 
 main = do 
-    xmonad =<< statusBar "xmobar" myPP toggleStrutsKey (withNavigation2DConfig def $ dynamicProjects projects $ fullscreenSupport $ myConfig)
+    xmonad =<< statusBar "xmobar" myPP toggleStrutsKey (withNavigation2DConfig def $ fullscreenSupport $ myConfig)
 
 myPP = namedScratchpadFilterOutWorkspacePP 
      $ xmobarPP { ppOrder = \(ws:l:t:_) -> [ws, t]
@@ -154,59 +154,60 @@ myWorkspaces =
     --, Node "prgm" []
     --, Node "hw" []
     , Node "docs" []
-    --, Node "matlab" []
-    --, Node "misc" []
+    , Node "matlab" []
+    , Node "media" []
+    , Node "misc" []
     --, Node "game" []
-    --, Node "web" []
+    , Node "web" []
     ]
-
-projects :: [Project]
-projects = 
-    [ Project { projectName = "misc"
-              , projectDirectory = "~/"
-              , projectStartHook = Just $ do runInTerm "" "htop"
-              }
-
-    , Project { projectName = "\xf120"
-              , projectDirectory = "~/"
-              , projectStartHook = Just $ do spawn "terminator"
-              }
-
-    , Project { projectName = "\xf085"
-              , projectDirectory = "~/"
-              , projectStartHook = Just $ do spawn "firefox"
-                                             spawn "terminator"
-              }
-
-   -- , Project { projectName = "prgm"
-   --           , projectDirectory = "~/MEGA"
-   --           , projectStartHook = Just $ do spawn "terminator"
-   --                                          spawn "terminator"
-   --                                          spawn "terminator"
-
-   --           }
-
-    , Project { projectName = "\xf0f6"
-              , projectDirectory = "~/MEGA"
-              , projectStartHook = Just $ do spawn "okular"
-
-              }
-
-   -- , Project { projectName = "hw"
-   --           , projectDirectory = "~/MEGA"
-   --           , projectStartHook = Just $ do spawn "firefox"
-   --                                          runInTerm "" "ranger"
-
-   --           }
-    
-    , Project { projectName = "web"
-              , projectDirectory = "~/"
-              , projectStartHook = Just $ do spawn "firefox"
-
-              }
-
-    ]
-                                          
+--
+--projects :: [Project]
+--projects = 
+--    [ Project { projectName = "misc"
+--              , projectDirectory = "~/"
+--              , projectStartHook = Just $ do runInTerm "" "htop"
+--              }
+--
+--    , Project { projectName = "\xf120"
+--              , projectDirectory = "~/"
+--              , projectStartHook = Just $ do spawn "terminator"
+--              }
+--
+--    , Project { projectName = "\xf085"
+--              , projectDirectory = "~/"
+--              , projectStartHook = Just $ do spawn "firefox"
+--                                             spawn "terminator"
+--              }
+--
+--   -- , Project { projectName = "prgm"
+--   --           , projectDirectory = "~/MEGA"
+--   --           , projectStartHook = Just $ do spawn "terminator"
+--   --                                          spawn "terminator"
+--   --                                          spawn "terminator"
+--
+--   --           }
+--
+--    , Project { projectName = "\xf0f6"
+--              , projectDirectory = "~/MEGA"
+--              , projectStartHook = Just $ do spawn "okular"
+--
+--              }
+--
+--   -- , Project { projectName = "hw"
+--   --           , projectDirectory = "~/MEGA"
+--   --           , projectStartHook = Just $ do spawn "firefox"
+--   --                                          runInTerm "" "ranger"
+--
+--   --           }
+--    
+--    , Project { projectName = "web"
+--              , projectDirectory = "~/"
+--              , projectStartHook = Just $ do spawn "firefox"
+--
+--              }
+--
+--    ]
+--                                          
 myTabTheme = def { fontName = "xft:xos4 Terminus:style=bold:size=13"
                  , decoHeight = 32
                  , activeTextColor = "#ffffff" --"#fbf1c7"
@@ -239,7 +240,6 @@ topBarTheme = def
 --    [ (modMask, xk_Tab)
 --    ]
 --    testing
-function X<C-x>
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             [ ((modm .|. controlMask, xK_h), sendMessage $ pullGroup L)
@@ -257,9 +257,18 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             --, ((altMask, xK_h), sendMessage $ Go L)
             --, ((altMask, xK_l), sendMessage $ Go R)
             --Dynamic projects
-            , ((modm, xK_s), switchProjectPrompt myPrompt)
-            , ((modm, xK_slash), shiftToProjectPrompt myPrompt)
-            , ((modm, xK_w), renameProjectPrompt myPrompt)
+--            , ((modm, xK_s), switchProjectPrompt myPrompt)
+--            , ((modm, xK_slash), shiftToProjectPrompt myPrompt)
+--            , ((modm, xK_w), renameProjectPrompt myPrompt)
+--            Dynamic workspaces
+--
+            , ((modm .|. shiftMask, xK_BackSpace), removeWorkspace)
+            , ((modm, xK_s      ), selectWorkspace myPrompt)
+            , ((modm, xK_slash                    ), withWorkspace myPrompt (windows . W.shift))
+            , ((modm .|. shiftMask, xK_r      ), renameWorkspace myPrompt)
+            , ((modm, xK_w      ), addWorkspacePrompt myPrompt)
+
+
             , ((modm, xK_z), sendMessage MirrorExpand)
             , ((modm, xK_a), sendMessage MirrorShrink)
             , ((modm, xK_g), sequence_ $ [sendMessage $ IncMasterN 1, sendMessage $ pullGroup D, sendMessage $ IncMasterN (-1)])
@@ -283,6 +292,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((altMask, xK_l), windowGo R False)
             , ((altMask, xK_Tab), windows W.focusDown)
             , ((altMask, xK_q), windows W.focusUp)
+            , ((altMask, xK_m), windows W.focusMaster)
 
             --easy switching of workspaces
             , ((modm, xK_Left), prevWS)

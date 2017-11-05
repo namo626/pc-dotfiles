@@ -63,6 +63,7 @@ udisksvm -a &
 compton --config ~/.compton.conf -b
 feh --bg-scale ~/Pictures/cube.png &
 stalonetray &
+copyq &
 imwheel
 
 #choosing between different wms

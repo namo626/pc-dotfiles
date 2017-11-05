@@ -41,8 +41,6 @@ autocmd FileType tex inoremap ;bp \begin{picture}()(<++>)<Enter>\end{picture}<Es
 
 " ========== GENERAL VIM SETTINGS ==========
 let g:ctrlp_show_hidden = 1
-set wildchar=<Tab> wildmenu wildmode=full
-set wildcharm=<C-Z>
 "nnoremap <F10> :b <C-Z>
 nnoremap <F10> :ls<CR>:b<Space>
 set autowriteall
@@ -56,6 +54,7 @@ map gp :bp<cr>
 map gd :bd<cr>
 set path+=**
 set wildmenu
+set wildmode=longest,list,full
 cmap w!! w !sudo tee > /dev/null %
 " dark mode for gruvbox
 set background=dark
