@@ -85,7 +85,7 @@ addTopBar = noFrillsDeco shrinkText topBarTheme
 
 myLayoutHook =
     onWorkspace "misc" miscLayout 
-    $ onWorkspace "web" webLayout
+    $ onWorkspace "web" docsLayout
     $ onWorkspace "media" mediaLayout
     $ onWorkspace "docs" docsLayout
     $ onWorkspaces ["conf", "matlab"] (trackFloating mainLayout)
@@ -96,8 +96,8 @@ myScratchpads =
     [ NS "terminal" ("urxvt -name scratchpad") (resource=? "scratchpad") doCenterFloat
     , NS "slack" "slack" (stringProperty "WM_NAME" =? "Slack - Honors Physics II (Fall 2017)") doCenterFloat
     , NS "ranger" ("urxvt -name ranger -e ranger") (resource =? "ranger") (customFloating $ W.RationalRect 0.05 0.05 0.4 0.4)
-    , NS "notes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") nonFloating
-    , NS "floatnotes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") doCenterFloat
+--    , NS "notes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") nonFloating
+    , NS "floatnotes" "emacsclient -c" (stringProperty "WM_NAME" =? "emacs@namo-pc") doCenterFloat
     ]
 
 --subLayout has problem with trackFLoating?
@@ -110,16 +110,16 @@ mainModifier =
     . spacingWithEdge 13
     . hiddenWindows
 
-webModifier = 
-    mkToggle (single FULL)
-    . windowNavigation
-    . addTopBar
-    . spacingWithEdge 13
-    . trackFloating 
+--webModifier = 
+--    mkToggle (single FULL)
+--    . windowNavigation
+--    . addTopBar
+--    . spacingWithEdge 13
+--    . trackFloating 
 
 mainLayout = mainModifier (ResizableTall 1 (3/100) (56/100) [] ||| Full)
 otherLayout = mainModifier (ResizableTall 1 (3/100) (50/100) [] ||| Full)
-webLayout = webModifier (Full ||| Tall 1 (3/100) (50/100))
+--webLayout = webModifier (Full ||| Tall 1 (3/100) (50/100))
 docsLayout = 
     mkToggle (single FULL)
     . windowNavigation
@@ -158,6 +158,7 @@ myWorkspaces =
     , Node "media" []
     , Node "misc" []
     --, Node "game" []
+    , Node "lisp" []
     , Node "web" []
     ]
 --
@@ -247,6 +248,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm .|. controlMask, xK_k), sendMessage $ pullGroup U)
             , ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
             , ((modm, xK_d), spawn "rofi -show run -font \"Droid Sans Mono for Powerline 20\"")
+            , ((modm, xK_e), spawn "emacsclient -c")
             , ((modm .|. altMask, xK_l), spawn "i3lock -c 000000") 
             , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
             , ((modm .|. controlMask, xK_comma), sequence_ $ [withFocused (sendMessage . MergeAll), windows W.focusMaster, withFocused (sendMessage . UnMerge), windowGo R False])

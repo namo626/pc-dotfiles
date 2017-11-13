@@ -19,6 +19,7 @@
 #    fi
 #}
 alias ls='ls --color=auto'
+alias emacsclient='emacsclient -c'
 #PS1='[\u@\h \W]\$ '
 COLOR1="\[$(tput setaf 178)\]"
 COLOR2="\[$(tput setaf 148)\]"
@@ -29,6 +30,7 @@ BOLD="\[$(tput bold)\]"
 RESET="\[$(tput sgr0)\]"
 #export PS1="${COLOR4}${BOLD}${COLOR1}\u${WHITE}:${COLOR2}\w${COLOR4}${COLOR3} \$${RESET} "
 export PATH=$PATH:~/.local/bin:~/scripts
+export EDITOR=vim
 powerline-daemon -q
 POWERLINE_BASH_CONTINUATION=1
 POWERLINE_BASH_SELECT=1
