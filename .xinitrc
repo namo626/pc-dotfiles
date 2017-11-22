@@ -52,6 +52,7 @@ fi
 wmname LG3D
 xss-lock -- i3lock -n -i ~/Pictures/cube.png &
 setxkbmap -layout us,th -option grp:lctrl_lshift_toggle
+setxkbmap -option caps:escape
 xxkb &
 megasync &
 dropbox &
@@ -61,8 +62,9 @@ xset s 3600 3600
 xset dpms 3610 3610 3610
 udisksvm -a &
 compton --config ~/.compton.conf -b
-feh --bg-scale ~/Pictures/cube.png &
+feh --bg-scale ~/Pictures/yosemite.png &
 stalonetray &
+mpd ~/.mpdconf/mpd.conf
 copyq &
 imwheel
 

@@ -249,7 +249,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
             , ((modm, xK_d), spawn "rofi -show run -font \"Droid Sans Mono for Powerline 20\"")
             , ((modm, xK_e), spawn "emacsclient -c")
-            , ((modm .|. altMask, xK_l), spawn "i3lock -c 000000") 
+            , ((modm .|. altMask, xK_l), spawn "i3lock -i ~/Pictures/yosemite.png") 
             , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
             , ((modm .|. controlMask, xK_comma), sequence_ $ [withFocused (sendMessage . MergeAll), windows W.focusMaster, withFocused (sendMessage . UnMerge), windowGo R False])
             , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
@@ -329,9 +329,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm .|. altMask, xK_i), setLimit 3)
 
             --mpd binding (mpc)
-            , ((modm .|. altMask, xK_p), spawn "mpc pause")
-            , ((modm .|. altMask, xK_o), spawn "mpc play")
-            , ((modm .|. altMask, xK_i), spawn "mpc next")
+            , ((modm .|. altMask, xK_p), spawn "mpc toggle")
+            , ((modm .|. altMask, xK_o), spawn "mpc next")
 
             --twopane + rotslaves
             , ((altMask .|. shiftMask, xK_k), rotSlavesUp)
