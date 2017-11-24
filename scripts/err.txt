@@ -1,0 +1,1 @@
+bash: cd: ksf: No such file or directory

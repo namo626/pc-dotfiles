@@ -1,4 +1,5 @@
 *
+!scripts/
 !.config/
 .config/*
 !.config/ranger/
@@ -17,4 +18,3 @@
 !.imwheelrc
 !.bashrc
 !.compton.conf
-!scripts/
