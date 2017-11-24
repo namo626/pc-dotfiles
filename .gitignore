@@ -3,6 +3,9 @@
 !.config/
 .config/*
 !.config/ranger/
+!.mpdconf/
+.mpdconf/*
+!.mpdconf/mpd.conf
 
 # Exceptions
 !.gitignore
