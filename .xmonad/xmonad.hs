@@ -3,6 +3,9 @@ import XMonad.Layout.Hidden
 import XMonad.Layout.DragPane
 import XMonad.Layout.TwoPane
 import XMonad.Actions.RotSlaves
+import XMonad.Actions.GroupNavigation
+import XMonad.Actions.WindowBringer
+import XMonad.Actions.CycleWindows (cycleRecentWindows)
 import XMonad.Layout.LimitWindows
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.Accordion
@@ -62,6 +65,7 @@ myConfig = def {
     , layoutHook = myLayoutHook
     , keys = myKeys <+> keys def
     , XMonad.workspaces = toWorkspaces myWorkspaces
+    , logHook = historyHook
     --, focusFollowsMouse = False
     --, startupHook = spawn "stalonetray"
     } 
@@ -249,6 +253,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
             , ((modm, xK_d), spawn "rofi -show run -font \"Droid Sans Mono for Powerline 20\"")
             , ((modm, xK_e), spawn "emacsclient -c")
+            , ((modm, xK_f), gotoMenu)
             , ((modm .|. altMask, xK_l), spawn "i3lock -i ~/Pictures/yosemite.png") 
             , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
             , ((modm .|. controlMask, xK_comma), sequence_ $ [withFocused (sendMessage . MergeAll), windows W.focusMaster, withFocused (sendMessage . UnMerge), windowGo R False])
@@ -292,9 +297,11 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((altMask, xK_k), windowGo U False)
             , ((altMask, xK_h), windowGo L False)
             , ((altMask, xK_l), windowGo R False)
-            , ((altMask, xK_Tab), windows W.focusDown)
+            , ((controlMask, xK_Tab), windows W.focusDown)
             , ((altMask, xK_q), windows W.focusUp)
             , ((altMask, xK_m), windows W.focusMaster)
+            , ((altMask, xK_Tab), nextMatch History (return True))
+            --, ((altMask .|. shiftMask, xK_Tab), cycleRecentWindows [xK_Super_L] xK_Tab xK_Tab)
 
             --easy switching of workspaces
             , ((modm, xK_Left), prevWS)
