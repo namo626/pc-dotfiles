@@ -28,9 +28,12 @@ COLOR2="\[$(tput setaf 148)\]"
 COLOR3="\[$(tput setaf 188)\]"
 COLOR4="\[$(tput setaf 137)\]"
 WHITE="\[$(tput setaf 15)\]"
+BLUE="\[$(tput setaf 109)\]"
+BLUE2="\[$(tput setaf 108)\]"
+BLUE3="\[$(tput setaf 66)\]"
 BOLD="\[$(tput bold)\]"
 RESET="\[$(tput sgr0)\]"
-export PS1="${BOLD}${GRAY2}\u:\w \$${RESET} "
+export PS1="${BOLD}${BLUE2}\u:\w \$${RESET} "
 
 #export PS1="${COLOR4}${BOLD}${COLOR1}\u${WHITE}:${COLOR2}\w${COLOR4}${COLOR3} \$${RESET} "
 export PATH=$PATH:~/.local/bin:~/scripts
