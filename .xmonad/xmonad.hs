@@ -1,4 +1,9 @@
 import XMonad
+import Data.Word
+import qualified Data.List as L
+import XMonad.Util.NamedWindows (getName)
+import XMonad.Hooks.EwmhDesktops (ewmh)
+import XMonad.Actions.GridSelect
 import XMonad.Layout.Hidden
 import XMonad.Layout.DragPane
 import XMonad.Layout.TwoPane
@@ -49,7 +54,7 @@ import XMonad.Layout.MultiToggle.Instances
 import XMonad.Layout.TrackFloating
 
 main = do 
-    xmonad =<< statusBar "xmobar" myPP toggleStrutsKey (withNavigation2DConfig def $ fullscreenSupport $ myConfig)
+    xmonad =<< statusBar "xmobar" myPP toggleStrutsKey (withNavigation2DConfig def $ fullscreenSupport $ ewmh myConfig)
 
 myPP = namedScratchpadFilterOutWorkspacePP 
      $ xmobarPP { ppOrder = \(ws:l:t:_) -> [ws, t]
@@ -64,21 +69,21 @@ myConfig = def {
     , terminal = myTerminal
     , layoutHook = myLayoutHook
     , keys = myKeys <+> keys def
-    , XMonad.workspaces = toWorkspaces myWorkspaces
+    , XMonad.workspaces = myWorkspaces
     , logHook = historyHook
     --, focusFollowsMouse = False
     --, startupHook = spawn "stalonetray"
     } 
-myManageHook = (composeOne
-                [ name =? "Terminator Preferences" -?> ((insertPosition Above Newer) <+> doCenterFloat)
-                , isDialog -?> ((insertPosition Above Newer) <+> doCenterFloat)
-                , className =? "Eog" -?> (insertPosition Below Older)
-                , className =? "MATLAB R2017b - academic use" -?> (insertPosition Below Older)
-                , className =? "feh" -?> (insertPosition Below Older)
-                , className =? "okular" -?> (insertPosition Below Older)
-                , className =? "Mirage" -?> (insertPosition Below Older)
+myManageHook = composeOne
+                [ name =? "Terminator Preferences" -?> insertPosition Above Newer <+> doCenterFloat
+                , isDialog -?> insertPosition Above Newer <+> doCenterFloat
+                , className =? "Eog" -?> insertPosition Below Older
+                , className =? "MATLAB R2017b - academic use" -?> insertPosition Below Older
+                , className =? "feh" -?> insertPosition Below Older
+--                , className =? "okular" -?> (insertPosition Below Older)
+                , className =? "Mirage" -?> insertPosition Below Older
                 , className =? "Thunar" -?> doCenterFloat 
-                , (return True) -?> (insertPosition Below Newer)])
+                , return True -?> insertPosition Below Newer]
                 <+> namedScratchpadManageHook myScratchpads
                 where name = stringProperty "WM_NAME"
                       
@@ -97,9 +102,9 @@ myLayoutHook =
 
 
 myScratchpads = 
-    [ NS "terminal" ("urxvt -name scratchpad") (resource=? "scratchpad") doCenterFloat
+    [ NS "terminal" "urxvt -name scratchpad" (resource=? "scratchpad") doCenterFloat
     , NS "slack" "slack" (stringProperty "WM_NAME" =? "Slack - Honors Physics II (Fall 2017)") doCenterFloat
-    , NS "ranger" ("urxvt -name ranger -e ranger") (resource =? "ranger") (customFloating $ W.RationalRect 0.05 0.05 0.4 0.4)
+    , NS "ranger" "urxvt -name ranger -e ranger" (resource =? "ranger") (customFloating $ W.RationalRect 0.05 0.05 0.4 0.4)
 --    , NS "notes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") nonFloating
     , NS "floatnotes" "emacsclient -c" (stringProperty "WM_NAME" =? "emacs@namo-pc") doCenterFloat
     ]
@@ -151,19 +156,30 @@ miscLayout =
 
 toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
-myWorkspaces :: Forest String
+--xmobarEscape = concatMap doubleLts where
+--  doubleLts '<' = "<<"
+--  doubleLts x = [x]
+
+--myWorkspaces :: [String]        
+--myWorkspaces = clickable . (map xmobarEscape) $ ["conf","term","docs","matlab","media","misc","lisp","web"]
+--                                                                              
+--  where                                                                       
+--         clickable l = [ "<action=xdotool key Super_L+" ++ show (n) ++ ">" ++ ws ++ "</action>" |
+--                             (i,ws) <- zip [1..] l,                                        
+--                            let n = i ]
+myWorkspaces :: [String]
 myWorkspaces = 
-    [ Node "conf" []
-    , Node "term" []
-    --, Node "prgm" []
-    --, Node "hw" []
-    , Node "docs" []
-    , Node "matlab" []
-    , Node "media" []
-    , Node "misc" []
-    --, Node "game" []
-    , Node "lisp" []
-    , Node "web" []
+    [ "conf" 
+    , "term" 
+    --, "prgm" 
+    --, "hw" 
+    , "docs" 
+    , "matlab" 
+    , "media" 
+    , "misc" 
+    --, "game" 
+    , "lisp" 
+    , "web" 
     ]
 --
 --projects :: [Project]
@@ -235,7 +251,58 @@ topBarTheme = def
     , decoHeight            = 15
     }
 
+--Custom functions
+--Alt-Tab behavior using GroupNavigation
+sameWorkSpace = do
+  nw <- ask
+  liftX $ do
+    ws <- gets windowset
+    return $ maybe False (== W.currentTag ws) (W.findTag nw ws)
 
+currentWsWindows :: Eq a => W.StackSet i l a s sd -> [a]
+currentWsWindows = W.integrate' . W.stack . W.workspace . W.current
+
+newtype Win = Win String 
+instance XPrompt Win where
+  showXPrompt (Win _) = "select window: "
+
+windowPrompt :: XPConfig -> ([(String, Window)] -> String -> X ()) -> X ()
+windowPrompt conf job = do
+  ss <- gets windowset
+  let currentWindows = currentWsWindows ss -- :: [Window]
+  winNames <- mapM (fmap (convertSpaces '_' . show) . getName) $ currentWindows --all window names in current workspace with spaces removed
+  mkXPrompt (Win "") conf (mkComplFunFromList' $ winNames) (job $ zip winNames currentWindows )
+
+selectWindow :: XPConfig -> X ()
+selectWindow conf = windowPrompt conf job where --job takes a string (window name) and use focusWindow to focus
+   job wList wName =
+    case lookup wName wList of
+      Nothing -> return ()
+      Just win -> windows $ W.focusWindow win
+
+convertSpaces :: Char -> String -> String
+convertSpaces new = map (\c -> if c == ' ' then new else c)
+
+appendNewLine :: String -> String
+appendNewLine s = s ++ ['\n']
+
+
+myPrompt = def
+  { font = "xft:Droid Sans Mono for Powerline:size=13"
+  , position = CenteredAt (1/2) (1/2)
+  , height = 40
+  , searchPredicate = L.isInfixOf
+  }
+
+
+myPrompt2 = def
+  { font = "xft:Droid Sans Mono for Powerline:size=13"
+  , position = CenteredAt (1/2) (3/10)
+  , height = 40
+  , searchPredicate = L.isSubsequenceOf
+  , maxComplRows = Just (fromIntegral 10 :: Word32)
+  }
+  
 --keybindings        
 
 --keys to overwrite
@@ -251,12 +318,14 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm .|. controlMask, xK_l), sendMessage $ pullGroup R)
             , ((modm .|. controlMask, xK_k), sendMessage $ pullGroup U)
             , ((modm .|. controlMask, xK_j), sendMessage $ pullGroup D)
+            --area for testing custom functions
+            , ((modm, xK_v), selectWindow myPrompt2)
             , ((modm, xK_d), spawn "rofi -show run -font \"Droid Sans Mono for Powerline 20\"")
             , ((modm, xK_e), spawn "emacsclient -c")
             , ((modm, xK_f), gotoMenu)
             , ((modm .|. altMask, xK_l), spawn "i3lock -i ~/Pictures/yosemite.png") 
             , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
-            , ((modm .|. controlMask, xK_comma), sequence_ $ [withFocused (sendMessage . MergeAll), windows W.focusMaster, withFocused (sendMessage . UnMerge), windowGo R False])
+            , ((modm .|. controlMask, xK_comma), sequence_ [withFocused (sendMessage . MergeAll), windows W.focusMaster, withFocused (sendMessage . UnMerge), windowGo R False])
             , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
             , ((modm .|. controlMask, xK_i), withFocused (sendMessage . UnMergeAll))
             --, ((altMask, xK_j), sendMessage $ Go D)
@@ -278,13 +347,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
 
             , ((modm, xK_z), sendMessage MirrorExpand)
             , ((modm, xK_a), sendMessage MirrorShrink)
-            , ((modm, xK_g), sequence_ $ [sendMessage $ IncMasterN 1, sendMessage $ pullGroup D, sendMessage $ IncMasterN (-1)])
+            , ((modm, xK_g), sequence_ [sendMessage $ IncMasterN 1, sendMessage $ pullGroup D, sendMessage $ IncMasterN (-1)])
             -- caused white glitch, ((altMask, xK_f), treeselectWorkspace tsDefaultConfig myWorkspaces W.greedyView)
             --, ((modm, xK_n), namedScratchpadAction scratchpads "thunar")
             , ((modm .|. shiftMask, xK_BackSpace), removeWorkspace)
             , ((modm, xK_n), moveToNewGroupUp)
             , ((modm, xK_p), splitGroup)
-            , ((modm, xK_grave), sequence_ $ [sendMessage ToggleStruts, sendMessage $ Toggle FULL])
+            , ((modm, xK_grave), sequence_ [sendMessage ToggleStruts, sendMessage $ Toggle FULL])
  --           , ((modm .|. shiftMask, xK_Tab), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup L]) 
  --           , ((controlMask .|. shiftMask, xK_Tab), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup D]) 
 
@@ -300,8 +369,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((controlMask, xK_Tab), windows W.focusDown)
             , ((altMask, xK_q), windows W.focusUp)
             , ((altMask, xK_m), windows W.focusMaster)
-            , ((altMask, xK_Tab), nextMatch History (return True))
+            , ((altMask, xK_Tab), nextMatch History sameWorkSpace)
             --, ((altMask .|. shiftMask, xK_Tab), cycleRecentWindows [xK_Super_L] xK_Tab xK_Tab)
+--            , ((modm, xK_g), goToSelected def)
 
             --easy switching of workspaces
             , ((modm, xK_Left), prevWS)
@@ -344,11 +414,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((altMask .|. shiftMask, xK_j), rotSlavesDown)
             ]
 
-myPrompt = def
-  { font = "xft:Droid Sans Mono for Powerline:size=13"
-  , position = CenteredAt (1/2) (1/2)
-  , height = 40
-  }
 
 base03  = "#002b36"
 base02  = "#073642"

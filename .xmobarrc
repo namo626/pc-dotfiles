@@ -20,4 +20,4 @@ commands = [
     Run Com "/bin/bash" ["/home/namo/scripts/vol.sh"] "vol" 10,
     Run Com "/bin/bash" ["/home/namo/scripts/vollogo.sh"] "vollogo" 10],
 alignSep = "}{",
-template = "%StdinReader% }{ %mpd%        <fn=1>%vollogo%</fn> %vol%  %disku%  %diskio%  %coretemp%  %cpu%  %memory%  <action=`gsimplecal` button=1>%date%</action> | %kbd%                   "
+template = "%StdinReader% }{ %mpd%        <fn=0>%vollogo%</fn> %vol%  %disku%  %diskio%  %coretemp%  %cpu%  %memory%  <action=`gsimplecal` button=1>%date%</action> | %kbd%                   "
