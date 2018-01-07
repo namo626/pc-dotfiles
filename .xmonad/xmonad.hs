@@ -107,6 +107,7 @@ myScratchpads =
     , NS "ranger" "urxvt -name ranger -e ranger" (resource =? "ranger") (customFloating $ W.RationalRect 0.05 0.05 0.4 0.4)
 --    , NS "notes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") nonFloating
     , NS "floatnotes" "emacsclient -c" (stringProperty "WM_NAME" =? "emacs@namo-pc") doCenterFloat
+    , NS "calculator" "gnome-calculator" (stringProperty "WM_NAME" =? "Calculator") defaultFloating
     ]
 
 --subLayout has problem with trackFLoating?
@@ -322,7 +323,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm, xK_v), selectWindow myPrompt2)
             , ((modm, xK_d), spawn "rofi -show run -font \"Droid Sans Mono for Powerline 20\"")
             , ((modm, xK_e), spawn "emacsclient -c")
-            , ((modm, xK_f), gotoMenu)
             , ((modm .|. altMask, xK_l), spawn "i3lock -i ~/Pictures/yosemite.png") 
             , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
             , ((modm .|. controlMask, xK_comma), sequence_ [withFocused (sendMessage . MergeAll), windows W.focusMaster, withFocused (sendMessage . UnMerge), windowGo R False])
@@ -388,6 +388,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm .|. controlMask, xK_b), namedScratchpadAction myScratchpads "slack")
             , ((modm .|. controlMask, xK_r), namedScratchpadAction myScratchpads "ranger")
             , ((modm .|. controlMask, xK_v), namedScratchpadAction myScratchpads "notes")
+            , ((modm .|. controlMask, xK_o), namedScratchpadAction myScratchpads "calculator")
             , ((modm .|. controlMask, xK_Return), namedScratchpadAction myScratchpads "floatnotes")
 
             --moving floating windows

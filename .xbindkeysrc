@@ -8,15 +8,15 @@
 
 # Mute/unmute volume
 "pactl set-sink-mute 1 toggle"
-   XF86AudioMute
+   Mod4 + F5
+   #XF86AudioMute
+
 
 ## Lock screen
 #"/usr/bin/i3lock -c 000000"
 #   Mod1 + Mod4 + L 
 
 #"rofi -show run -font \"Droid Sans Mono for Powerline 20\""
-"rofi -show run"
-   Mod4 + x
 
-"copyq menu"
-   Mod2 + F10
+# "copyq menu"
+#    F2
