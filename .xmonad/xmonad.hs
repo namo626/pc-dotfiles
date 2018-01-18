@@ -173,12 +173,12 @@ myWorkspaces =
     [ "conf" 
     , "term" 
     --, "prgm" 
-    --, "hw" 
     , "docs" 
     , "matlab" 
     , "media" 
     , "misc" 
     --, "game" 
+    , "hw" 
     , "lisp" 
     , "web" 
     ]
