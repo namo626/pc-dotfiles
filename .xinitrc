@@ -60,7 +60,8 @@ nm-applet &
 xbindkeys
 xset s 3600 3600
 xset dpms 3610 3610 3610
-udisksvm -a &
+# udisksvm -a &
+udiskie --tray &
 compton --config ~/.compton.conf -b
 feh --bg-scale ~/Pictures/yosemite.png &
 stalonetray &

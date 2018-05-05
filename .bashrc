@@ -36,7 +36,7 @@ RESET="\[$(tput sgr0)\]"
 export PS1="${BOLD}${BLUE2}\u:\w \$${RESET} "
 
 #export PS1="${COLOR4}${BOLD}${COLOR1}\u${WHITE}:${COLOR2}\w${COLOR4}${COLOR3} \$${RESET} "
-export PATH=$PATH:~/.local/bin:~/scripts
+export PATH=$PATH:~/.local/bin:~/scripts:/var/namo/.local/bin
 export EDITOR=vim
 #powerline-daemon -q
 #POWERLINE_BASH_CONTINUATION=1
@@ -51,3 +51,5 @@ export EDITOR=vim
 
 #ntfs folder color
 eval $(dircolors -b ~/.dircolors)
+eval "$(stack --bash-completion-script stack)"
+
