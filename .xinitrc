@@ -49,14 +49,14 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 #DONT FORGET TO PUT AMPERSAND (&)!!!!!!!!!!!
-wmname LG3D
-xss-lock -- i3lock -n -i ~/Pictures/cube.png &
+#wmname LG3D
+xss-lock -- xscreensaver-command -lock &
 setxkbmap -layout us,th -option grp:lctrl_lshift_toggle
 setxkbmap -option caps:escape
 xxkb &
 megasync &
 dropbox &
-nm-applet &
+#nm-applet &
 xbindkeys
 xset s 3600 3600
 xset dpms 3610 3610 3610
@@ -66,13 +66,9 @@ compton --config ~/.compton.conf -b
 feh --bg-scale ~/Pictures/yosemite.png &
 stalonetray &
 mpd ~/.mpdconf/mpd.conf
-copyq &
+#copyq &
 imwheel
-
-#choosing between different wms
-session=${1:-xmonad}
-case $session in 
-  xmonad ) exec xmonad;;
-  i3 ) exec i3;;
-  * ) exec xmonad;;
-esac
+xinput --set-prop 11 'libinput Accel Speed' 0.5 &
+xscreensaver &
+redshift &
+exec xmonad

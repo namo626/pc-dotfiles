@@ -37,6 +37,7 @@ export PS1="${BOLD}${BLUE2}\u:\w \$${RESET} "
 
 #export PS1="${COLOR4}${BOLD}${COLOR1}\u${WHITE}:${COLOR2}\w${COLOR4}${COLOR3} \$${RESET} "
 export PATH=$PATH:~/.local/bin:~/scripts:/var/namo/.local/bin
+export PATH=/var/namo/anaconda2/bin:$PATH
 export EDITOR=vim
 #powerline-daemon -q
 #POWERLINE_BASH_CONTINUATION=1
@@ -50,6 +51,7 @@ export EDITOR=vim
 #export MATLAB_JAVA=/usr/lib/jvm/java-7-openjdk/jre
 
 #ntfs folder color
-eval $(dircolors -b ~/.dircolors)
+#eval $(dircolors -b ~/.dircolors)
 eval "$(stack --bash-completion-script stack)"
 
+complete -cf sudo

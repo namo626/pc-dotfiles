@@ -1,6 +1,7 @@
 " ========= VUNDLE CONFIG ===========
 set nocompatible
 set nofoldenable
+set noswapfile
 set showcmd
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim

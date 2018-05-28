@@ -65,14 +65,16 @@ myConfig = def {
       manageHook = fullscreenManageHook <+> myManageHook <+> {-insertPosition Below Newer <+>-}manageDocks <+> manageHook def
     , handleEventHook = handleEventHook def <+> docksEventHook <+> fullscreenEventHook
     , modMask = mod4Mask
-    , borderWidth = 0
+    , borderWidth = 6
     , terminal = myTerminal
     , layoutHook = myLayoutHook
     , keys = myKeys <+> keys def
     , XMonad.workspaces = myWorkspaces
     , logHook = historyHook
     --, focusFollowsMouse = False
-    --, startupHook = spawn "stalonetray"
+--    , startupHook = spawn "stalonetray"
+    , focusedBorderColor = "#268bd2"
+    , normalBorderColor = "#002b36"
     } 
 myManageHook = composeOne
                 [ name =? "Terminator Preferences" -?> insertPosition Above Newer <+> doCenterFloat
@@ -90,14 +92,15 @@ myManageHook = composeOne
  
 myTerminal = "terminator"
 altMask = mod1Mask
-addTopBar = noFrillsDeco shrinkText topBarTheme
+--addTopBar = noFrillsDeco shrinkText topBarTheme
 
 myLayoutHook =
     onWorkspace "misc" miscLayout 
     $ onWorkspace "web" docsLayout
     $ onWorkspace "media" mediaLayout
     $ onWorkspace "docs" docsLayout
-    $ onWorkspaces ["conf", "matlab"] (trackFloating mainLayout)
+    $ onWorkspace "matlab" (matlabLayout)
+    $ onWorkspaces ["conf"] (trackFloating mainLayout)
     otherLayout
 
 
@@ -114,7 +117,7 @@ myScratchpads =
 mainModifier = 
     mkToggle (single FULL)
     . windowNavigation
-    . addTopBar
+    -- . addTopBar
     . addTabs shrinkText myTabTheme 
     . subLayout [] (Simplest ||| Full ||| dragPane Horizontal 0.5 0.5)
     . spacingWithEdge 13
@@ -123,24 +126,33 @@ mainModifier =
 --webModifier = 
 --    mkToggle (single FULL)
 --    . windowNavigation
---    . addTopBar
+----    . addTopBar
 --    . spacingWithEdge 13
 --    . trackFloating 
 
 mainLayout = mainModifier (ResizableTall 1 (3/100) (56/100) [] ||| Full)
 otherLayout = mainModifier (ResizableTall 1 (3/100) (50/100) [] ||| Full)
 --webLayout = webModifier (Full ||| Tall 1 (3/100) (50/100))
+matlabLayout =
+    windowNavigation
+    . addTabs shrinkText myTabTheme
+    . subLayout [] (Simplest ||| Full)
+    . spacingWithEdge 13
+    $ (ResizableTall 1 (3/100) (56/100) [] ||| ResizableTall 1 (3/100) (80/100) [] ||| thinMirror ||| Full)
+
+thinMirror = Mirror $ ResizableTall 2 (3/100) (63/100) []
+
 docsLayout = 
     mkToggle (single FULL)
     . windowNavigation
-    . addTopBar
+    -- . addTopBar
     . spacingWithEdge 13
     . trackFloating 
     $ TwoPane (3/100) (1/2) ||| Full ||| (Tall 1 (3/100) (1/2))
 mediaLayout = 
     mkToggle (single FULL)
     . windowNavigation
-    . addTopBar
+    -- . addTopBar
     . spacingWithEdge 13
     . trackFloating 
     $ (GridRatio (3/3) ||| Full)
@@ -148,7 +160,7 @@ mediaLayout =
 miscLayout = 
     mkToggle (single FULL)
     . windowNavigation
-    . addTopBar
+    -- . addTopBar
     . spacingWithEdge 13
     . trackFloating 
     $ (Grid ||| Full ||| Circle)
@@ -323,7 +335,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm, xK_v), selectWindow myPrompt2)
             , ((modm, xK_d), spawn "rofi -show run -font \"Droid Sans Mono for Powerline 20\"")
             , ((modm, xK_e), spawn "emacsclient -c")
-            , ((modm .|. altMask, xK_l), spawn "i3lock -i ~/Pictures/yosemite.png") 
+            , ((modm .|. altMask, xK_l), spawn "xscreensaver-command -lock") 
             , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
             , ((modm .|. controlMask, xK_comma), sequence_ [withFocused (sendMessage . MergeAll), windows W.focusMaster, withFocused (sendMessage . UnMerge), windowGo R False])
             , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))

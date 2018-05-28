@@ -13,8 +13,8 @@
 
 
 ## Lock screen
-#"/usr/bin/i3lock -c 000000"
-#   Mod1 + Mod4 + L 
+#"xscreensaver-command -lock"
+   ##Mod4 + F6
 
 #"rofi -show run -font \"Droid Sans Mono for Powerline 20\""
 
