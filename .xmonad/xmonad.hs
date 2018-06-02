@@ -1,5 +1,6 @@
 import XMonad
 import Data.Word
+import XMonad.Layout.Reflect
 import qualified Data.List as L
 import XMonad.Util.NamedWindows (getName)
 import XMonad.Hooks.EwmhDesktops (ewmh)
@@ -15,7 +16,7 @@ import XMonad.Layout.LimitWindows
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.Accordion
 import XMonad.Actions.FloatKeys
-import XMonad.Actions.DynamicWorkspaces 
+import XMonad.Actions.DynamicWorkspaces
 import XMonad.Actions.CycleWS
 import XMonad.Actions.CycleRecentWS
 import XMonad.Actions.Navigation2D
@@ -27,7 +28,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
 import XMonad.Util.Run
 import XMonad.Layout.Tabbed
-import XMonad.Layout  
+import XMonad.Layout
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.WindowNavigation
 import qualified XMonad.Layout.BoringWindows as B
@@ -51,12 +52,13 @@ import XMonad.Layout.Groups.Examples
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
+import qualified XMonad.Layout.ToggleLayouts as TL
 import XMonad.Layout.TrackFloating
 
-main = do 
+main = do
     xmonad =<< statusBar "xmobar" myPP toggleStrutsKey (withNavigation2DConfig def $ fullscreenSupport $ ewmh myConfig)
 
-myPP = namedScratchpadFilterOutWorkspacePP 
+myPP = namedScratchpadFilterOutWorkspacePP
      $ xmobarPP { ppOrder = \(ws:l:t:_) -> [ws, t]
                 , ppCurrent = xmobarColor "yellow" "green" . wrap "" ""
                 , ppTitle = xmobarColor "green" "" . shorten 30}
@@ -75,7 +77,7 @@ myConfig = def {
 --    , startupHook = spawn "stalonetray"
     , focusedBorderColor = "#268bd2"
     , normalBorderColor = "#002b36"
-    } 
+    }
 myManageHook = composeOne
                 [ name =? "Terminator Preferences" -?> insertPosition Above Newer <+> doCenterFloat
                 , isDialog -?> insertPosition Above Newer <+> doCenterFloat
@@ -84,54 +86,64 @@ myManageHook = composeOne
                 , className =? "feh" -?> insertPosition Below Older
 --                , className =? "okular" -?> (insertPosition Below Older)
                 , className =? "Mirage" -?> insertPosition Below Older
-                , className =? "Thunar" -?> doCenterFloat 
+                , className =? "Thunar" -?> doCenterFloat
                 , return True -?> insertPosition Below Newer]
                 <+> namedScratchpadManageHook myScratchpads
                 where name = stringProperty "WM_NAME"
-                      
- 
+
+
 myTerminal = "terminator"
 altMask = mod1Mask
 --addTopBar = noFrillsDeco shrinkText topBarTheme
 
 myLayoutHook =
-    onWorkspace "misc" miscLayout 
+    TL.toggleLayouts fullLayout
+    $ onWorkspace "misc" miscLayout
     $ onWorkspace "web" docsLayout
+    $ onWorkspace "term" otherLayout'
     $ onWorkspace "media" mediaLayout
-    $ onWorkspace "docs" docsLayout
+    $ onWorkspace "docs" (reflectHoriz docsLayout)
     $ onWorkspace "matlab" (matlabLayout)
     $ onWorkspaces ["conf"] (trackFloating mainLayout)
     otherLayout
 
+fullLayout =
+  addTabs shrinkText myTabTheme
+  . subLayout [] Simplest
+  . spacingWithEdge 13
+  $ Full
 
-myScratchpads = 
+myScratchpads =
     [ NS "terminal" "urxvt -name scratchpad" (resource=? "scratchpad") doCenterFloat
     , NS "slack" "slack" (stringProperty "WM_NAME" =? "Slack - Honors Physics II (Fall 2017)") doCenterFloat
     , NS "ranger" "urxvt -name ranger -e ranger" (resource =? "ranger") (customFloating $ W.RationalRect 0.05 0.05 0.4 0.4)
 --    , NS "notes" "emacs" (stringProperty "WM_NAME" =? "emacs@namo-pc") nonFloating
-    , NS "floatnotes" "emacsclient -c" (stringProperty "WM_NAME" =? "emacs@namo-pc") doCenterFloat
+    --, NS "floatnotes" "emacsclient -c" (stringProperty "WM_NAME" =? "emacs@namo-pc") doCenterFloat
     , NS "calculator" "gnome-calculator" (stringProperty "WM_NAME" =? "Calculator") defaultFloating
     ]
 
 --subLayout has problem with trackFLoating?
-mainModifier = 
+mainModifier =
     mkToggle (single FULL)
     . windowNavigation
     -- . addTopBar
-    . addTabs shrinkText myTabTheme 
+    . addTabs shrinkText myTabTheme
     . subLayout [] (Simplest ||| Full ||| dragPane Horizontal 0.5 0.5)
     . spacingWithEdge 13
     . hiddenWindows
 
---webModifier = 
+--webModifier =
 --    mkToggle (single FULL)
 --    . windowNavigation
 ----    . addTopBar
 --    . spacingWithEdge 13
---    . trackFloating 
+--    . trackFloating
 
 mainLayout = mainModifier (ResizableTall 1 (3/100) (56/100) [] ||| Full)
-otherLayout = mainModifier (ResizableTall 1 (3/100) (50/100) [] ||| Full)
+
+otherLayout = mainModifier (ResizableTall 1 (3/100) (53/100) [] ||| Full)
+otherLayout' = mainModifier (ResizableTall 1 (3/100) (50/100) [] ||| Full)
+
 --webLayout = webModifier (Full ||| Tall 1 (3/100) (50/100))
 matlabLayout =
     windowNavigation
@@ -142,27 +154,26 @@ matlabLayout =
 
 thinMirror = Mirror $ ResizableTall 2 (3/100) (63/100) []
 
-docsLayout = 
+docsLayout =
     mkToggle (single FULL)
     . windowNavigation
     -- . addTopBar
     . spacingWithEdge 13
-    . trackFloating 
     $ TwoPane (3/100) (1/2) ||| Full ||| (Tall 1 (3/100) (1/2))
-mediaLayout = 
+mediaLayout =
     mkToggle (single FULL)
     . windowNavigation
     -- . addTopBar
     . spacingWithEdge 13
-    . trackFloating 
-    $ (GridRatio (3/3) ||| Full)
+    . trackFloating
+    $ (GridRatio (3/3) ||| Grid ||| Full)
 
-miscLayout = 
+miscLayout =
     mkToggle (single FULL)
     . windowNavigation
     -- . addTopBar
     . spacingWithEdge 13
-    . trackFloating 
+    . trackFloating
     $ (Grid ||| Full ||| Circle)
 
 
@@ -173,76 +184,29 @@ toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 --  doubleLts '<' = "<<"
 --  doubleLts x = [x]
 
---myWorkspaces :: [String]        
+--myWorkspaces :: [String]
 --myWorkspaces = clickable . (map xmobarEscape) $ ["conf","term","docs","matlab","media","misc","lisp","web"]
---                                                                              
---  where                                                                       
+--
+--  where
 --         clickable l = [ "<action=xdotool key Super_L+" ++ show (n) ++ ">" ++ ws ++ "</action>" |
---                             (i,ws) <- zip [1..] l,                                        
+--                             (i,ws) <- zip [1..] l,
 --                            let n = i ]
 myWorkspaces :: [String]
-myWorkspaces = 
-    [ "conf" 
-    , "term" 
-    --, "prgm" 
-    , "docs" 
-    , "matlab" 
-    , "media" 
-    , "misc" 
-    --, "game" 
-    , "hw" 
-    , "lisp" 
-    , "web" 
+myWorkspaces =
+    [ "conf"
+    , "term"
+    --, "prgm"
+    , "docs"
+    , "matlab"
+    , "media"
+    , "misc"
+    --, "game"
+    , "hw"
+    , "lisp"
+    , "web"
     ]
 --
---projects :: [Project]
---projects = 
---    [ Project { projectName = "misc"
---              , projectDirectory = "~/"
---              , projectStartHook = Just $ do runInTerm "" "htop"
---              }
---
---    , Project { projectName = "\xf120"
---              , projectDirectory = "~/"
---              , projectStartHook = Just $ do spawn "terminator"
---              }
---
---    , Project { projectName = "\xf085"
---              , projectDirectory = "~/"
---              , projectStartHook = Just $ do spawn "firefox"
---                                             spawn "terminator"
---              }
---
---   -- , Project { projectName = "prgm"
---   --           , projectDirectory = "~/MEGA"
---   --           , projectStartHook = Just $ do spawn "terminator"
---   --                                          spawn "terminator"
---   --                                          spawn "terminator"
---
---   --           }
---
---    , Project { projectName = "\xf0f6"
---              , projectDirectory = "~/MEGA"
---              , projectStartHook = Just $ do spawn "okular"
---
---              }
---
---   -- , Project { projectName = "hw"
---   --           , projectDirectory = "~/MEGA"
---   --           , projectStartHook = Just $ do spawn "firefox"
---   --                                          runInTerm "" "ranger"
---
---   --           }
---    
---    , Project { projectName = "web"
---              , projectDirectory = "~/"
---              , projectStartHook = Just $ do spawn "firefox"
---
---              }
---
---    ]
---                                          
-myTabTheme = def { fontName = "xft:xos4 Terminus:style=bold:size=13"
+myTabTheme = def { fontName = "xft:Ubuntu Mono derivative Powerline:style=bold:size=13"
                  , decoHeight = 32
                  , activeTextColor = "#ffffff" --"#fbf1c7"
                  , inactiveTextColor = "#ebdbb2"
@@ -275,7 +239,7 @@ sameWorkSpace = do
 currentWsWindows :: Eq a => W.StackSet i l a s sd -> [a]
 currentWsWindows = W.integrate' . W.stack . W.workspace . W.current
 
-newtype Win = Win String 
+newtype Win = Win String
 instance XPrompt Win where
   showXPrompt (Win _) = "select window: "
 
@@ -315,13 +279,13 @@ myPrompt2 = def
   , searchPredicate = L.isSubsequenceOf
   , maxComplRows = Just (fromIntegral 10 :: Word32)
   }
-  
---keybindings        
+
+--keybindings
 
 --keys to overwrite
 --newKeys x = foldr M.delete (keys def x) (keysToRemove x)
 --keysToRemove :: XConfig Layout -> [(KeyMask, KeySym)]
---keysToRemove x = M.fromList 
+--keysToRemove x = M.fromList
 --    [ (modMask, xk_Tab)
 --    ]
 --    testing
@@ -335,7 +299,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm, xK_v), selectWindow myPrompt2)
             , ((modm, xK_d), spawn "rofi -show run -font \"Droid Sans Mono for Powerline 20\"")
             , ((modm, xK_e), spawn "emacsclient -c")
-            , ((modm .|. altMask, xK_l), spawn "xscreensaver-command -lock") 
+            , ((modm .|. altMask, xK_l), spawn "xscreensaver-command -lock")
             , ((modm .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
             , ((modm .|. controlMask, xK_comma), sequence_ [withFocused (sendMessage . MergeAll), windows W.focusMaster, withFocused (sendMessage . UnMerge), windowGo R False])
             , ((modm .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
@@ -365,9 +329,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm .|. shiftMask, xK_BackSpace), removeWorkspace)
             , ((modm, xK_n), moveToNewGroupUp)
             , ((modm, xK_p), splitGroup)
-            , ((modm, xK_grave), sequence_ [sendMessage ToggleStruts, sendMessage $ Toggle FULL])
- --           , ((modm .|. shiftMask, xK_Tab), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup L]) 
- --           , ((controlMask .|. shiftMask, xK_Tab), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup D]) 
+            --, ((modm, xK_grave), sequence_ [sendMessage ToggleStruts, sendMessage $ Toggle FULL])
+            , ((modm, xK_grave), sendMessage TL.ToggleLayout)
+ --           , ((modm .|. shiftMask, xK_Tab), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup L])
+ --           , ((controlMask .|. shiftMask, xK_Tab), sequence_ $ [withFocused (sendMessage . UnMerge), sendMessage $ pullGroup D])
 
             --easy navigation and swapping of windows
             , ((modm .|. shiftMask, xK_h), windowSwap L False)
@@ -409,8 +374,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
 
             -- sublayouts
             , ((modm .|. altMask, xK_space), toSubl NextLayout)
-            , ((modm .|. altMask, xK_j), windows W.swapDown)
-            , ((modm .|. altMask, xK_k), windows W.swapUp)
+            --, ((modm .|. altMask, xK_j), windows W.swapDown)
+            --, ((modm .|. altMask, xK_k), windows W.swapUp)
             , ((modm .|. altMask, xK_comma), toSubl (IncMasterN 1))
             , ((modm .|. altMask, xK_period), toSubl (IncMasterN (-1)))
             , ((modm, xK_r), toSubl Rotate)
@@ -423,8 +388,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((modm .|. altMask, xK_o), spawn "mpc next")
 
             --twopane + rotslaves
-            , ((altMask .|. shiftMask, xK_k), rotSlavesUp)
-            , ((altMask .|. shiftMask, xK_j), rotSlavesDown)
+            , ((altMask .|. modm, xK_k), rotSlavesUp)
+            , ((altMask .|. modm, xK_j), rotSlavesDown)
+
+
+            -- toggle layouts
+
             ]
 
 
@@ -444,5 +413,3 @@ violet  = "#6c71c4"
 blue    = "#268bd2"
 cyan    = "#2aa198"
 green = "#859900"
-
-
