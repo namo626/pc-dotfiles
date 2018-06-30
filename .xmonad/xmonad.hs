@@ -1,6 +1,12 @@
 import XMonad
+import qualified XMonad.Prompt.Window as WP
+import XMonad.Layout.TwoPanePersistent
+import Control.Monad (when)
 import Data.Word
+import Data.Monoid
 import XMonad.Layout.Reflect
+import XMonad.Layout.ComboP
+import XMonad.Actions.SpawnOn (spawnHere)
 import qualified Data.List as L
 import XMonad.Util.NamedWindows (getName)
 import XMonad.Hooks.EwmhDesktops (ewmh)
@@ -56,7 +62,7 @@ import qualified XMonad.Layout.ToggleLayouts as TL
 import XMonad.Layout.TrackFloating
 
 main = do
-    xmonad =<< statusBar "xmobar" myPP toggleStrutsKey (withNavigation2DConfig def $ fullscreenSupport $ ewmh myConfig)
+    xmonad =<< statusBar "xmobar" myPP toggleStrutsKey (withNavigation2DConfig (def {defaultTiledNavigation = hybridNavigation}) $ fullscreenSupport $ ewmh myConfig)
 
 myPP = namedScratchpadFilterOutWorkspacePP
      $ xmobarPP { ppOrder = \(ws:l:t:_) -> [ws, t]
@@ -104,7 +110,8 @@ myLayoutHook =
     $ onWorkspace "media" mediaLayout
     $ onWorkspace "docs" (reflectHoriz docsLayout)
     $ onWorkspace "matlab" (matlabLayout)
-    $ onWorkspaces ["conf"] (trackFloating mainLayout)
+    $ onWorkspace "lisp" twoPaneTabbed
+    $ onWorkspaces ["conf"] (mainLayout)
     otherLayout
 
 fullLayout =
@@ -125,22 +132,20 @@ myScratchpads =
 --subLayout has problem with trackFLoating?
 mainModifier =
     mkToggle (single FULL)
-    . windowNavigation
+    . configurableNavigation noNavigateBorders
     -- . addTopBar
     . addTabs shrinkText myTabTheme
     . subLayout [] (Simplest ||| Full ||| dragPane Horizontal 0.5 0.5)
     . spacingWithEdge 13
     . hiddenWindows
 
---webModifier =
---    mkToggle (single FULL)
---    . windowNavigation
-----    . addTopBar
---    . spacingWithEdge 13
---    . trackFloating
+twoPaneTabbed =
+  combineTwoP (TwoPane 0.03 0.53) (spacing' Full) (addTabs shrinkText myTabTheme $ spacing' Simplest) (pred) |||
+  combineTwoP (TwoPane 0.03 0.53) (spacing' Full) (Mirror $ spacing' $ ThreeCol 1 0.03 0.6) (pred)
+  where spacing' = spacingWithEdge 6
+        pred = ClassName "Firefox" `Or` ClassName "qpdfview"
 
 mainLayout = mainModifier (ResizableTall 1 (3/100) (56/100) [] ||| Full)
-
 otherLayout = mainModifier (ResizableTall 1 (3/100) (53/100) [] ||| Full)
 otherLayout' = mainModifier (ResizableTall 1 (3/100) (50/100) [] ||| Full)
 
@@ -150,7 +155,7 @@ matlabLayout =
     . addTabs shrinkText myTabTheme
     . subLayout [] (Simplest ||| Full)
     . spacingWithEdge 13
-    $ (ResizableTall 1 (3/100) (56/100) [] ||| ResizableTall 1 (3/100) (80/100) [] ||| thinMirror ||| Full)
+    $ (ResizableTall 1 (3/100) (56/100) [] ||| ResizableTall 1 (3/100) (86/100) [] ||| thinMirror ||| Full)
 
 thinMirror = Mirror $ ResizableTall 2 (3/100) (63/100) []
 
@@ -158,23 +163,25 @@ docsLayout =
     mkToggle (single FULL)
     . windowNavigation
     -- . addTopBar
+--    . addTabs shrinkText myTabTheme
+ --   . subLayout [] Simplest
     . spacingWithEdge 13
-    $ TwoPane (3/100) (1/2) ||| Full ||| (Tall 1 (3/100) (1/2))
+    $ TwoPanePersistent Nothing (3/100) (1/2) ||| Full ||| (Tall 1 (3/100) (1/2))
 mediaLayout =
     mkToggle (single FULL)
     . windowNavigation
     -- . addTopBar
     . spacingWithEdge 13
     . trackFloating
-    $ (GridRatio (3/3) ||| Grid ||| Full)
+    $ (GridRatio (3/3) ||| Mirror (ThreeCol 1 (3/100) (1/2)) ||| Full)
 
 miscLayout =
     mkToggle (single FULL)
-    . windowNavigation
     -- . addTopBar
     . spacingWithEdge 13
     . trackFloating
-    $ (Grid ||| Full ||| Circle)
+    $ (Grid ||| Full ||| Tall 1 (3/100) (1/2))
+
 
 
 
@@ -228,7 +235,27 @@ topBarTheme = def
     , decoHeight            = 15
     }
 
---Custom functions
+{- Custom functions -}
+
+-- Window closing hook
+closeWindowHook :: Event -> X All
+closeWindowHook (DestroyWindowEvent _ _ _ _ ev w) = do
+  spawnHere "sleep 1"
+  lastID <- lastWindowID
+  when (ev == w && lastID /= w) $ nextMatch History sameWorkSpace
+  --firstID <- initWindowID
+  --when (ev == w) $ windows (W.focusWindow firstID)
+  return (All True)
+
+-- retrieves the window ID of the last window in the workspace
+extremeWindowID :: ([Window] -> Window) -> X Window
+extremeWindowID f = do
+  windowList <- gets (W.integrate' . W.stack . W.workspace . W.current . windowset)
+  return $ f windowList
+
+lastWindowID = extremeWindowID last
+initWindowID = extremeWindowID head
+
 --Alt-Tab behavior using GroupNavigation
 sameWorkSpace = do
   nw <- ask
@@ -348,7 +375,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((altMask, xK_m), windows W.focusMaster)
             , ((altMask, xK_Tab), nextMatch History sameWorkSpace)
             --, ((altMask .|. shiftMask, xK_Tab), cycleRecentWindows [xK_Super_L] xK_Tab xK_Tab)
---            , ((modm, xK_g), goToSelected def)
+            , ((modm, xK_u), goToSelected defaultGSConfig)
 
             --easy switching of workspaces
             , ((modm, xK_Left), prevWS)
@@ -393,6 +420,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
 
 
             -- toggle layouts
+            -- prompt
+            , ((modm, xK_p), WP.windowPrompt myPrompt WP.Goto WP.wsWindows)
 
             ]
 

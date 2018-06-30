@@ -1,0 +1,16 @@
+
+xmonad.hs:65:111: warning: [-Wdeprecations]
+    In the use of ‘hybridNavigation’
+    (imported from XMonad.Actions.Navigation2D):
+    Deprecated: "Use hybridOf with lineNavigation and centerNavigation as arguments."
+   |
+65 |     xmonad =<< statusBar "xmobar" myPP toggleStrutsKey (withNavigation2DConfig (def {defaultTiledNavigation = hybridNavigation}) $ fullscreenSupport $ ewmh myConfig)
+   |                                                                                                               ^^^^^^^^^^^^^^^^
+
+xmonad.hs:378:43: warning: [-Wdeprecations]
+    In the use of ‘defaultGSConfig’
+    (imported from XMonad.Actions.GridSelect):
+    Deprecated: "Use def (from Data.Default, and re-exported from XMonad.Actions.GridSelect) instead."
+    |
+378 |             , ((modm, xK_u), goToSelected defaultGSConfig)
+    |                                           ^^^^^^^^^^^^^^^
