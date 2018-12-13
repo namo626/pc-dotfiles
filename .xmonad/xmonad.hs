@@ -1,4 +1,8 @@
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+
 import XMonad
+import XMonad.Prompt.Layout
 import qualified XMonad.Prompt.Window as WP
 import XMonad.Layout.TwoPanePersistent
 import Control.Monad (when)
@@ -87,12 +91,11 @@ myConfig = def {
 myManageHook = composeOne
                 [ name =? "Terminator Preferences" -?> insertPosition Above Newer <+> doCenterFloat
                 , isDialog -?> insertPosition Above Newer <+> doCenterFloat
-                , className =? "Eog" -?> insertPosition Below Older
+                , className =? "Eog" -?> doCenterFloat
                 , className =? "MATLAB R2017b - academic use" -?> insertPosition Below Older
-                , className =? "feh" -?> insertPosition Below Older
---                , className =? "okular" -?> (insertPosition Below Older)
                 , className =? "Mirage" -?> insertPosition Below Older
                 , className =? "Thunar" -?> doCenterFloat
+                , className =? "feh" -?> doFloat
                 , return True -?> insertPosition Below Newer]
                 <+> namedScratchpadManageHook myScratchpads
                 where name = stringProperty "WM_NAME"
@@ -110,7 +113,7 @@ myLayoutHook =
     $ onWorkspace "media" mediaLayout
     $ onWorkspace "docs" (reflectHoriz docsLayout)
     $ onWorkspace "matlab" (matlabLayout)
-    $ onWorkspace "lisp" twoPaneTabbed
+    $ onWorkspaces ["prog1", "prog2"] progLayout
     $ onWorkspaces ["conf"] (mainLayout)
     otherLayout
 
@@ -135,9 +138,8 @@ mainModifier =
     . configurableNavigation noNavigateBorders
     -- . addTopBar
     . addTabs shrinkText myTabTheme
-    . subLayout [] (Simplest ||| Full ||| dragPane Horizontal 0.5 0.5)
+    . subLayout [] Simplest
     . spacingWithEdge 13
-    . hiddenWindows
 
 twoPaneTabbed =
   combineTwoP (TwoPane 0.03 0.53) (spacing' Full) (addTabs shrinkText myTabTheme $ spacing' Simplest) (pred) |||
@@ -146,6 +148,7 @@ twoPaneTabbed =
         pred = ClassName "Firefox" `Or` ClassName "qpdfview"
 
 mainLayout = mainModifier (ResizableTall 1 (3/100) (56/100) [] ||| Full)
+progLayout = (mainModifier (ResizableTall 1 (3/100) (47/100) [] ||| Full)) ||| twoPaneTabbed
 otherLayout = mainModifier (ResizableTall 1 (3/100) (53/100) [] ||| Full)
 otherLayout' = mainModifier (ResizableTall 1 (3/100) (50/100) [] ||| Full)
 
@@ -161,6 +164,7 @@ thinMirror = Mirror $ ResizableTall 2 (3/100) (63/100) []
 
 docsLayout =
     mkToggle (single FULL)
+    . trackFloating
     . windowNavigation
     -- . addTopBar
 --    . addTabs shrinkText myTabTheme
@@ -206,10 +210,9 @@ myWorkspaces =
     , "docs"
     , "matlab"
     , "media"
+    , "prog1"
+    , "prog2"
     , "misc"
-    --, "game"
-    , "hw"
-    , "lisp"
     , "web"
     ]
 --
@@ -375,7 +378,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             , ((altMask, xK_m), windows W.focusMaster)
             , ((altMask, xK_Tab), nextMatch History sameWorkSpace)
             --, ((altMask .|. shiftMask, xK_Tab), cycleRecentWindows [xK_Super_L] xK_Tab xK_Tab)
-            , ((modm, xK_u), goToSelected defaultGSConfig)
+            --, ((modm, xK_u), goToSelected defaultGSConfig)
 
             --easy switching of workspaces
             , ((modm, xK_Left), prevWS)
@@ -422,6 +425,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList
             -- toggle layouts
             -- prompt
             , ((modm, xK_p), WP.windowPrompt myPrompt WP.Goto WP.wsWindows)
+            , ((modm, xK_u), layoutPrompt myPrompt)
 
             ]
 

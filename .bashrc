@@ -20,6 +20,8 @@
 #}
 alias ls='ls --color=auto'
 alias emacsclient='emacsclient -c'
+alias hgi='hoogle -i'
+alias stin='stack install'
 #PS1='\u@\h:\w\$ '
 GRAY1="\[$(tput setaf 116)\]"
 GRAY2="\[$(tput setaf 251)\]"
@@ -37,7 +39,7 @@ export PS1="${BOLD}${BLUE2}\u:\w \$${RESET} "
 
 #export PS1="${COLOR4}${BOLD}${COLOR1}\u${WHITE}:${COLOR2}\w${COLOR4}${COLOR3} \$${RESET} "
 export PATH=$PATH:~/.local/bin:~/scripts:/var/namo/.local/bin
-export PATH=/var/namo/anaconda2/bin:$PATH
+#export PATH=/var/namo/anaconda2/bin:$PATH
 export EDITOR=vim
 #powerline-daemon -q
 #POWERLINE_BASH_CONTINUATION=1
